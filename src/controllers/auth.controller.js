@@ -33,17 +33,18 @@ controllers.login = async (req, res) => {
         .json({ message: "Usuario y/o contraseña incorrecto" });
 
     console.log("Usuario logueado correctamente");
-    const userData = await model.findUserById(userFound.idPers);
+    const userData = await model.findUserById(userFound.id);
     console.log(userData);
 
-    const token = await createAcessToken({ idPers: userData.idPers });
+    const token = await createAcessToken({ id: userData.id });
     res.cookie("token", token);
 
     res.json({
-      idPers: userData.idPers,
-      nombre: userData.nombre,
-      apePaterno: userData.apePaterno,
-      apeMaterno: userData.apeMaterno,
+      id: userData.id,
+      nombres: userData.nombres,
+      apellido_paterno: userData.apellido_paterno,
+      apellido_materno: userData.apellido_materno,
+      correo_institucional: userData.correo_institucional,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -58,20 +59,21 @@ controllers.verify = async (req, res) => {
   jwt.verify(token, TOKEN_SECRET, async (err, user) => {
     console.log(user);
     if (err) return res.status(403).json({ message: "Autorización denegada" });
-    const userFound = await model.findUserById(user.idPers);
+    const userFound = await model.findUserById(user.id);
     if (!userFound) return res.status(401).json({ message: "Token invalido" });
     return res.json({
-      idPers: userFound.idPers,
-      nombre: userFound.nombre,
-      apePaterno: userFound.apePaterno,
-      apeMaterno: userFound.apeMaterno,
+      id: userFound.id,
+      nombres: userFound.nombres,
+      apellido_paterno: userFound.apellido_paterno,
+      apellido_materno: userFound.apellido_materno,
+      correo_institucional: userFound.correo_institucional,
     });
   });
 };
 
 controllers.logout = async (req, res) => {
   res.cookie("token", "", { expires: new Date(0) });
-  return res.sendstatus(200);
+  return res.sendStatus(200);
 };
 
 export default controllers;

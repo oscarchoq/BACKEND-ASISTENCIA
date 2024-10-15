@@ -20,13 +20,10 @@ model.findUser = async (arg) => {
 
 model.findUserById = async (arg) => {
   return sequelize
-    .query(
-      "SELECT idPers, nombre, apePaterno, apeMaterno FROM persona WHERE idPers = :idPers",
-      {
-        replacements: { idPers: arg },
-        type: QueryTypes.SELECT,
-      }
-    )
+    .query("SELECT * FROM persona WHERE id = :id", {
+      replacements: { id: arg },
+      type: QueryTypes.SELECT,
+    })
     .then(([result, metadata]) => {
       const data = result.length === 0 ? null : result;
       return data;
