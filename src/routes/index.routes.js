@@ -3,6 +3,7 @@ import cors from "cors";
 
 // Mis rutas
 import authRoutes from "./auth.routes.js";
+import comboRoutes from "./combos.routes.js";
 
 const app = express();
 app.use(
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 
 // Importar rutas
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/combos", comboRoutes);
 
 app.use("*", (req, res) => {
   res.status(404).send("Not Found");
