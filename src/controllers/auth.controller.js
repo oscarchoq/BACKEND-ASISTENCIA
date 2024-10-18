@@ -33,7 +33,7 @@ controllers.login = async (req, res) => {
         .json({ message: "Usuario y/o contraseña incorrecto" });
 
     console.log("Usuario logueado correctamente");
-    const userData = await model.findUserById(userFound.id);
+    const userData = await model.findUserById(userFound.persona_id);
     console.log(userData);
 
     const token = await createAcessToken({ id: userData.id });

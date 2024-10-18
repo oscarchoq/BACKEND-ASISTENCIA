@@ -33,4 +33,24 @@ model.findUserById = async (arg) => {
     });
 };
 
+model.insertUser = async (arg) => {
+  console.log("Inserting user: ", arg);
+  const sql = `INSERT INTO credenciales (username, password, persona_id)
+                VALUES (?, ?, ?)`;
+  return sequelize
+    .query(sql, {
+      replacements: [arg.username, arg.password, arg.persona_id],
+      type: QueryTypes.INSERT,
+    })
+    .then(([result, metadata]) => {
+      console.log("Inserted: ", result);
+      console.log("Inserted: ", metadata);
+      return result;
+    })
+    .catch((error) => {
+      console.log("Error: ", error);
+      throw error;
+    });
+};
+
 export default model;
