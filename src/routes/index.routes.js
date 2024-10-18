@@ -25,8 +25,8 @@ app.get("/", (req, res) => {
 
 // Importar rutas
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/combos", comboRoutes);
 app.use("/api/v1/persona", personaRoutes);
+app.use("/api/v1/combos", comboRoutes);
 
 app.use("*", (req, res) => {
   res.status(404).send("Not Found");

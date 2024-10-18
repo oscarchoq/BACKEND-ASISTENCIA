@@ -34,4 +34,32 @@ controllers.insertar = async (req, res) => {
   }
 };
 
+controllers.mostrar = async (req, res) => {
+  try {
+    const result = await model.mostrar(2);
+    if (result) return res.status(200).json(result);
+  } catch (error) {}
+};
+
+controllers.mostrarById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await model.mostrarById(id);
+    if (result) return res.status(200).json(result);
+  } catch (error) {}
+};
+
+controllers.update = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    console.log("ID:", id);
+    console.log("Data:", data);
+    const result = await model.update(id, data);
+    return res.status(200).json({ result: result });
+    // if (result)
+    // return res.status(200).json({ message: "Registro actualizado" });
+  } catch (error) {}
+};
+
 export default controllers;
