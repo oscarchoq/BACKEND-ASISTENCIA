@@ -1,3 +1,6 @@
+-- DROP DATABASE IF EXISTS `assistance3`;
+-- USE `assistance3`;
+
 CREATE TABLE tipo_documento (
     id INT PRIMARY KEY AUTO_INCREMENT,
     descripcion VARCHAR(50) NOT NULL
@@ -49,13 +52,12 @@ CREATE TABLE credenciales (
     FOREIGN KEY (persona_id) REFERENCES persona(id)
 );
 
-DATOS
 
 INSERT INTO tipo_documento (descripcion)
-VALUES ('DOCUMENTO NACIONAL DE IDENTIDAD'), ('PASAPORTE')
+VALUES ('DOCUMENTO NACIONAL DE IDENTIDAD'), ('PASAPORTE');
 
 INSERT INTO estado_civil (descripcion)
-VALUES ('NO ESPECIFICADO'), ('SOLTERO'), ('CASADO'), ('DIVORCIADO/SEPARADO'), ('VIUDO'), ('CONVIVIENTE')
+VALUES ('NO ESPECIFICADO'), ('SOLTERO'), ('CASADO'), ('DIVORCIADO/SEPARADO'), ('VIUDO'), ('CONVIVIENTE');
 
 
 INSERT INTO grado_instruccion (descripcion)
@@ -88,10 +90,10 @@ INSERT INTO tipo_persona (nombre)
 VALUES 
 ('ADMINISTRADOR'),
 ('ESTUDIANTE'),
-('DOCENTE')
+('DOCENTE');
 
 INSERT INTO `persona` (`id`, `tipo_doc_id`, `nro_documento`, `apellido_paterno`, `apellido_materno`, `nombres`, `sexo`, `nro_celular`, `correo_institucional`, `correo_personal`, `fecha_nacimiento`, `estado_civil_id`, `grado_instruccion_id`, `tipo_pers_id`) VALUES (NULL, '1', '12345678', 'CHOQUE', 'SURCO', 'OSCAR ALEJANDRO', 'M', '938644684', 'oachoques@unjbg.edu.pe', 'oscarchoque@gmail.com', NULL, '2', '14', '1');
 
 INSERT INTO credenciales (persona_id, username, password)
 VALUES 
-(1, '2021-119080', '$2a$10$T.g7pjSJEc.pYucwdcfrxeeq0G3VcKcp/rEvmARJCPj6UWGMNgG9O')
+(1, '2021-119080', '$2a$10$T.g7pjSJEc.pYucwdcfrxeeq0G3VcKcp/rEvmARJCPj6UWGMNgG9O');
