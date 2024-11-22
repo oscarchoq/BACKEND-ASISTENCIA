@@ -9,3 +9,4 @@ export const DB_USER = process.env.DB_USER || "root";
 export const DB_PASSWORD = process.env.DB_PASSWORD || "";
 export const DB_DIALECT = process.env.DB_DIALECT || "mysql";
 export const TOKEN_SECRET = process.env.TOKEN_SECRET || "your-secret-key";
+export const RENIEC_API_KEY = process.env.RENIEC_API_KEY || "";

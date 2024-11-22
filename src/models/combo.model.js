@@ -5,7 +5,7 @@ const model = {};
 
 model.findGradoInstruccion = async () => {
   return sequelize
-    .query("SELECT * FROM grado_instruccion", {
+    .query("SELECT * FROM GradoInstruccion", {
       type: QueryTypes.SELECT,
     })
     .then((result) => {
@@ -20,7 +20,7 @@ model.findGradoInstruccion = async () => {
 
 model.findTipoDocumento = async () => {
   return sequelize
-    .query("SELECT * FROM tipo_documento", {
+    .query("SELECT * FROM TipoDocumento", {
       type: QueryTypes.SELECT,
     })
     .then((result) => {
@@ -35,7 +35,7 @@ model.findTipoDocumento = async () => {
 
 model.findEstadoCivil = async () => {
   return sequelize
-    .query("SELECT * FROM estado_civil", {
+    .query("SELECT * FROM EstadoCivil", {
       type: QueryTypes.SELECT,
     })
     .then((result) => {

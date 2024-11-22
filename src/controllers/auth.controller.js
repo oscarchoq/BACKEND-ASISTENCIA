@@ -19,33 +19,32 @@ controllers.login = async (req, res) => {
   const { username, password } = req.body;
   try {
     const userFound = await model.findUser(username);
-    console.log(userFound);
 
     if (!userFound)
       return res
         .status(401)
-        .json({ message: "Usuario y/o contraseña incorrecto" });
+        .json({ message: "Usuario y/o contraseña incorrectos" });
 
-    const isMatch = await bcrypt.compare(password, userFound.password);
+    if (userFound.Activo === 0)
+      return res
+        .status(401)
+        .json({ message: "Usuario y/o contraseña incorrectos" });
+
+    const isMatch = await bcrypt.compare(password, userFound.Password);
     if (!isMatch)
       return res
         .status(401)
-        .json({ message: "Usuario y/o contraseña incorrecto" });
+        .json({ message: "Usuario y/o contraseña incorrectos" });
 
     console.log("Usuario logueado correctamente");
-    const userData = await model.findUserById(userFound.persona_id);
+    console.log(userFound);
+
+    const userData = await model.findUserById(userFound.PersonaID);
     console.log(userData);
 
-    const token = await createAcessToken({ id: userData.id });
+    const token = await createAcessToken(userData);
     res.cookie("token", token);
-
-    res.json({
-      id: userData.id,
-      nombres: userData.nombres,
-      apellido_paterno: userData.apellido_paterno,
-      apellido_materno: userData.apellido_materno,
-      correo_institucional: userData.correo_institucional,
-    });
+    res.json(userData);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -59,15 +58,9 @@ controllers.verify = async (req, res) => {
   jwt.verify(token, TOKEN_SECRET, async (err, user) => {
     console.log(user);
     if (err) return res.status(403).json({ message: "Autorización denegada" });
-    const userFound = await model.findUserById(user.id);
+    const userFound = await model.findUserById(user.PersonaID);
     if (!userFound) return res.status(401).json({ message: "Token invalido" });
-    return res.json({
-      id: userFound.id,
-      nombres: userFound.nombres,
-      apellido_paterno: userFound.apellido_paterno,
-      apellido_materno: userFound.apellido_materno,
-      correo_institucional: userFound.correo_institucional,
-    });
+    return res.json(userFound);
   });
 };
 

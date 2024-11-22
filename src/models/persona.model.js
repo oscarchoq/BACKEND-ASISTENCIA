@@ -4,34 +4,34 @@ import sequelize from "../config/db.js";
 const model = {};
 
 model.insertar = async (data) => {
-  console.log(data.tipo_doc_id);
-  console.log(data.nro_celular || "");
-  const sql =
-    "INSERT INTO persona (tipo_doc_id, nro_documento, apellido_paterno, apellido_materno, nombres, sexo, nro_celular, correo_institucional, correo_personal, fecha_nacimiento, estado_civil_id, grado_instruccion_id, tipo_pers_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+  const sql = `INSERT INTO Persona (TipoDocID, NumeroDocumento, ApellidoPaterno, ApellidoMaterno, Nombres, Sexo, FechaNacimiento, EstadoCivilID, CorreoInstitucional, CorreoPersonal, NumeroCelular, NumeroCelular2, GradoInstruccionID, TipoPersonaID, Codigo, FechaRegistro) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW() )
+`;
 
   return sequelize
     .query(sql, {
       // raw: true,
       replacements: [
-        data.tipo_doc_id,
-        data.nro_documento,
-        data.apellido_paterno,
-        data.apellido_materno,
-        data.nombres,
-        data.sexo,
-        data.nro_celular || "",
-        data.correo_institucional || "",
-        data.correo_personal || "",
-        data.fecha_nacimiento,
-        data.estado_civil,
-        data.grado_instruccion,
-        data.tipo_pers_id,
+        data.TipoDocID,
+        data.NumeroDocumento,
+        data.ApellidoPaterno,
+        data.ApellidoMaterno,
+        data.Nombres,
+        data.Sexo,
+        data.FechaNacimiento || null,
+        data.EstadoCivilID,
+        data.CorreoInstitucional || null,
+        data.CorreoPersonal || null,
+        data.NumeroCelular || null,
+        data.NumeroCelular2 || null,
+        data.GradoInstruccionID,
+        data.TipoPersonaID,
+        data.Codigo,
       ],
       type: QueryTypes.INSERT,
     })
     .then(([result, metadata]) => {
-      console.log("Inserted pers RESULT: ", result);
-      console.log("Inserted pers METADA: ", metadata);
+      console.log("Inserted ID: ", result);
+      console.log("Inserted Rows afected: ", metadata);
       return result;
     })
     .catch((error) => {
@@ -126,5 +126,42 @@ model.update = async (id, data) => {
       throw error;
     });
 };
+
+// VALIDACION DE NUMERO DE DOCUMENTO
+model.validarDocumento = async (numDocumento) => {
+  const sql =
+    "SELECT COUNT(*) AS validarNumDoc FROM Persona WHERE NumeroDocumento = ?";
+  return sequelize
+    .query(sql, {
+      replacements: [numDocumento],
+      type: QueryTypes.SELECT,
+    })
+    .then((result) => {
+      console.log("Validated doc RESULT: ", result[0].validarNumDoc);
+      return result[0].validarNumDoc < 1;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
+// VALIDACION DE CORREO INSTITUCIONAL
+model.validarCorreoInstitucional = async (correo) => {
+  const sql =
+    "SELECT COUNT(*) AS validarCorreoInst FROM Persona WHERE CorreoInstitucional = ?";
+  return sequelize
+    .query(sql, {
+      replacements: [correo],
+      type: QueryTypes.SELECT,
+    })
+    .then((result) => {
+      console.log("Validated email RESULT: ", result[0].validarCorreoInst);
+      return result[0].validarCorreoInst < 1;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+// "CorreoInstitucional": "admin@esisdev.site",
 
 export default model;
