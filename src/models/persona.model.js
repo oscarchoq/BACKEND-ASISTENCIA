@@ -196,4 +196,28 @@ model.validarCodigo = async (codigo, id) => {
       throw error;
     });
 };
+
+// Chagen status ACTIVO
+model.changeStatus = async (id, status) => {
+  const sql = `
+  UPDATE Persona
+  SET Activo = ?
+  WHERE PersonaID = ?`;
+  return sequelize
+    .query(sql, {
+      replacements: [status, id],
+      type: QueryTypes.UPDATE,
+      raw: true,
+    })
+    .then(([result, metadata]) => {
+      console.log("Updated person RESULT: ", result);
+      // let info = result.info.split(" "); // convertir respuesta a array
+      // console.log(info);
+      console.log("Updated pers METADA: ", metadata);
+      return metadata;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
 export default model;

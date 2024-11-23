@@ -139,7 +139,24 @@ controllers.update = async (req, res) => {
     return res.status(200).json({ result: result });
     // if (result)
     // return res.status(200).json({ message: "Registro actualizado" });
-  } catch (error) {}
+  } catch (error) {
+    return res.status(500).json({ message: "Error al actualizar el registro" });
+  }
+};
+
+controllers.changeStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { Activo } = req.body;
+
+    console.log("ID => ", id);
+    console.log("data => ", Activo);
+    const newStatus = Activo === 0 ? 1 : 0;
+    const response = await model.changeStatus(id, newStatus);
+    return res.status(200).json({ message: "Estado actualizado" });
+  } catch (error) {
+    return res.status(500).json({ message: "Error al cambiar el estado" });
+  }
 };
 
 export default controllers;

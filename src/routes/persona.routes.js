@@ -4,6 +4,7 @@ import { typeDocente, typeEstudiante } from "../middlewares/typePerson.js";
 
 const router = Router();
 
+router.post("/estudiante/:id/status", controllers.changeStatus);
 router.get("/estudiante/:id", typeEstudiante, controllers.mostrarById);
 router.post("/estudiante/:id", controllers.update);
 router.post("/estudiante", controllers.insertar);
