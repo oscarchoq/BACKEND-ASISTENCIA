@@ -41,19 +41,25 @@ controllers.insertar = async (req, res) => {
   try {
     const data = req.body;
     console.log("Data:", data);
-    console.log("Nro. de documento:", data.CorreoInstitucional);
+    console.log("Nro. de documento:", data.NumeroDocumento);
 
     // Verificar que el nro_documento no está repetido
-    const isValid = await model.validarDocumento(data.NumeroDocumento);
-    if (!isValid)
+    const isValidDoc = await model.validarDocumento(data.NumeroDocumento, 0);
+    if (!isValidDoc)
       return res.status(409).json({ error: "Nro. de documento ya existe" });
 
     // Verificar que el email_institucional y correo_personal no están repetidos
     const isValidEmail = await model.validarCorreoInstitucional(
-      data.CorreoInstitucional
+      data.CorreoInstitucional,
+      0
     );
     if (!isValidEmail)
       return res.status(409).json({ error: "Correo institucional ya existe" });
+
+    // Verificar que el codigo no esta registrado
+    const isValidCodigo = await model.validarCodigo(data.Codigo, 0);
+    if (!isValidCodigo)
+      return res.status(409).json({ error: "Código ya existe" });
 
     // Insertar en la base de datos
     const persona_id = await model.insertar(data);
@@ -90,9 +96,15 @@ controllers.mostrar = async (req, res) => {
 controllers.mostrarById = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await model.mostrarById(id);
+    const typePerson = req.typePerson;
+    console.log(typePerson);
+    const result = await model.findById(id, typePerson);
+    console.log("usuario => ", result);
     if (result) return res.status(200).json(result);
-  } catch (error) {}
+    else return res.status(404).json({ message: "Registro no encontrado" });
+  } catch (error) {
+    return res.status(500).json({ message: "Error al obtener registro" });
+  }
 };
 
 controllers.update = async (req, res) => {
@@ -101,6 +113,28 @@ controllers.update = async (req, res) => {
     const data = req.body;
     console.log("ID:", id);
     console.log("Data:", data);
+
+    // Verificar que el nro_documento no está repetido
+    console.log("Nro. de documento:", data.NumeroDocumento);
+    const isValidDoc = await model.validarDocumento(data.NumeroDocumento, id);
+    if (!isValidDoc)
+      return res.status(409).json({ error: "Nro. de documento ya existe" });
+
+    // Verificar que el email_institucional y correo_personal no están repetidos
+    console.log("Email institucional:", data.CorreoInstitucional);
+    const isValidEmail = await model.validarCorreoInstitucional(
+      data.CorreoInstitucional,
+      id
+    );
+    if (!isValidEmail)
+      return res.status(409).json({ error: "Correo institucional ya existe" });
+
+    // Verificar que el codigo no esta registrado
+    console.log("Codigo:", data.Codigo, id);
+    const isValidCodigo = await model.validarCodigo(data.Codigo, id);
+    if (!isValidCodigo)
+      return res.status(409).json({ error: "Código ya existe" });
+
     const result = await model.update(id, data);
     return res.status(200).json({ result: result });
     // if (result)

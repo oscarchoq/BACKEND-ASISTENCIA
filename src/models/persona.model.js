@@ -69,12 +69,11 @@ model.findAll = async (id) => {
     });
 };
 
-model.mostrarById = async (id) => {
-  // const sql = "SELECT * FROM persona WHERE id = ?";
-  const sql = `SELECT * FROM Persona WHERE TipoPersonaID = ?`;
+model.findById = async (id, typePerson) => {
+  const sql = `SELECT * FROM Persona WHERE TipoPersonaID = ? AND PersonaID =?`;
   return sequelize
     .query(sql, {
-      replacements: [id],
+      replacements: [typePerson, id],
       type: QueryTypes.SELECT,
     })
     .then((result) => {
@@ -88,27 +87,54 @@ model.mostrarById = async (id) => {
 };
 
 model.update = async (id, data) => {
-  const sql =
-    "UPDATE persona SET apellido_paterno = ?, apellido_materno = ?, nombres = ?, sexo = ?, nro_celular = ?, correo_institucional = ?, correo_personal = ?, fecha_nacimiento = ?, estado_civil_id = ?, grado_instruccion_id = ? WHERE id =?";
+  const sql = `
+    UPDATE Persona
+    SET
+      TipoDocID = ?, 
+      NumeroDocumento = ?, 
+      ApellidoPaterno = ?, 
+      ApellidoMaterno = ?, 
+      Nombres = ?, 
+      Sexo = ?, 
+      FechaNacimiento = ?, 
+      EstadoCivilID = ?, 
+      CorreoInstitucional = ?, 
+      CorreoPersonal = ?, 
+      NumeroCelular = ?, 
+      NumeroCelular2 = ?, 
+      GradoInstruccionID = ?, 
+      TipoPersonaID = ?, 
+      Codigo = ?
+    WHERE PersonaID = ?
+  `;
+
   return sequelize
     .query(sql, {
       replacements: [
-        data.apellido_paterno,
-        data.apellido_materno,
-        data.nombres,
-        data.sexo,
-        data.nro_celular || "",
-        data.correo_institucional || "",
-        data.correo_personal || "",
-        data.fecha_nacimiento,
-        data.estado_civil,
-        data.grado_instruccion,
+        data.TipoDocID,
+        data.NumeroDocumento,
+        data.ApellidoPaterno,
+        data.ApellidoMaterno,
+        data.Nombres,
+        data.Sexo,
+        data.FechaNacimiento,
+        data.EstadoCivilID,
+        data.CorreoInstitucional || "",
+        data.CorreoPersonal || "",
+        data.NumeroCelular || "",
+        data.NumeroCelular2 || "",
+        data.GradoInstruccionID,
+        data.TipoPersonaID,
+        data.Codigo,
         id,
       ],
       type: QueryTypes.UPDATE,
+      raw: true,
     })
     .then(([result, metadata]) => {
-      console.log("Updated pers RESULT: ", result);
+      console.log("Updated person RESULT: ", result);
+      // let info = result.info.split(" "); // convertir respuesta a array
+      // console.log(info);
       console.log("Updated pers METADA: ", metadata);
       return metadata;
     })
@@ -118,12 +144,12 @@ model.update = async (id, data) => {
 };
 
 // VALIDACION DE NUMERO DE DOCUMENTO
-model.validarDocumento = async (numDocumento) => {
+model.validarDocumento = async (numDocumento, id) => {
   const sql =
-    "SELECT COUNT(*) AS validarNumDoc FROM Persona WHERE NumeroDocumento = ?";
+    "SELECT COUNT(*) AS validarNumDoc FROM Persona WHERE NumeroDocumento = ? AND PersonaID != ?";
   return sequelize
     .query(sql, {
-      replacements: [numDocumento],
+      replacements: [numDocumento, id],
       type: QueryTypes.SELECT,
     })
     .then((result) => {
@@ -136,12 +162,12 @@ model.validarDocumento = async (numDocumento) => {
 };
 
 // VALIDACION DE CORREO INSTITUCIONAL
-model.validarCorreoInstitucional = async (correo) => {
+model.validarCorreoInstitucional = async (correo, id) => {
   const sql =
-    "SELECT COUNT(*) AS validarCorreoInst FROM Persona WHERE CorreoInstitucional = ?";
+    "SELECT COUNT(*) AS validarCorreoInst FROM Persona WHERE CorreoInstitucional = ? AND PersonaID != ?";
   return sequelize
     .query(sql, {
-      replacements: [correo],
+      replacements: [correo, id],
       type: QueryTypes.SELECT,
     })
     .then((result) => {
@@ -152,6 +178,22 @@ model.validarCorreoInstitucional = async (correo) => {
       throw error;
     });
 };
-// "CorreoInstitucional": "admin@esisdev.site",
 
+// VALIDACION DE CODIGO
+model.validarCodigo = async (codigo, id) => {
+  const sql =
+    "SELECT COUNT(*) AS validarCodigo FROM Persona WHERE Codigo = ? AND PersonaID != ?";
+  return sequelize
+    .query(sql, {
+      replacements: [codigo, id],
+      type: QueryTypes.SELECT,
+    })
+    .then((result) => {
+      console.log("Validated codigo RESULT: ", result[0].validarCodigo);
+      return result[0].validarCodigo < 1;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
 export default model;
