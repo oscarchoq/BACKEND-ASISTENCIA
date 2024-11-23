@@ -40,8 +40,20 @@ model.insertar = async (data) => {
     });
 };
 
-model.mostrar = async (id) => {
-  const sql = "SELECT * FROM persona WHERE tipo_pers_id = ?";
+model.findAll = async (id) => {
+  const sql = `SELECT 
+                  PersonaID, 
+                  Codigo,
+                  CONCAT(ApellidoPaterno, " ", ApellidoMaterno, " ", Nombres) AS FullName, 
+                  NumeroDocumento,
+                  Activo,
+                  date(FechaRegistro) AS FechaRegistro,
+                  CASE
+                    WHEN Activo = 1 THEN "ACTIVO"
+                    WHEN Activo = 0 THEN "DESACTIVO"
+                  END AS Estado
+              FROM Persona
+              WHERE Eliminado = 0 AND TipoPersonaID = ?`;
   return sequelize
     .query(sql, {
       replacements: [id],
@@ -59,29 +71,7 @@ model.mostrar = async (id) => {
 
 model.mostrarById = async (id) => {
   // const sql = "SELECT * FROM persona WHERE id = ?";
-  const sql = `SELECT 
-    p.id,
-    p.tipo_doc_id,
-    p.nro_documento,
-    p.apellido_paterno,
-    p.apellido_materno,
-    p.nombres,
-    p.sexo,
-    p.nro_celular,
-    p.correo_institucional,
-    p.correo_personal,
-    p.fecha_nacimiento,
-    p.estado_civil_id,
-    p.grado_instruccion_id,
-    p.tipo_pers_id,
-    c.username AS cod_matricula
-FROM 
-    persona p
-LEFT JOIN 
-    credenciales c ON p.id = c.persona_id
-WHERE 
-    p.id = ?
-`;
+  const sql = `SELECT * FROM Persona WHERE TipoPersonaID = ?`;
   return sequelize
     .query(sql, {
       replacements: [id],

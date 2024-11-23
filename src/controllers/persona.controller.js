@@ -77,9 +77,14 @@ controllers.insertar = async (req, res) => {
 
 controllers.mostrar = async (req, res) => {
   try {
-    const result = await model.mostrar(2);
+    // 2 es ESTUDIANTES, 3 es DOCENTES
+    const typePerson = req.typePerson;
+    console.log(typePerson);
+    const result = await model.findAll(typePerson);
     if (result) return res.status(200).json(result);
-  } catch (error) {}
+  } catch (error) {
+    return res.status(500).json({ message: "Error al obtener registros" });
+  }
 };
 
 controllers.mostrarById = async (req, res) => {
