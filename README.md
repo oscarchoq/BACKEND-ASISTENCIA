@@ -17,6 +17,8 @@ DB_HOST='localhost'
 DB_PORT='3306'
 DB_DIALECT='mysql'
 TOKEN_SECRET=
+RENIEC_API_KEY=
+FRONTEND_URL=
 ```
 
 3. Ejecutar el proyecto

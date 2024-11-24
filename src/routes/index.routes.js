@@ -5,11 +5,12 @@ import cors from "cors";
 import authRoutes from "./auth.routes.js";
 import comboRoutes from "./combos.routes.js";
 import personaRoutes from "./persona.routes.js";
+import { FRONTEND_URL } from "../config/config.js";
 
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: FRONTEND_URL,
     credentials: true,
   })
 );

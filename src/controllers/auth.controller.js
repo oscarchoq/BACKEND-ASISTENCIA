@@ -36,11 +36,11 @@ controllers.login = async (req, res) => {
         .status(401)
         .json({ message: "Usuario y/o contraseña incorrectos" });
 
-    console.log("Usuario logueado correctamente");
-    console.log(userFound);
+    // console.log("Usuario logueado correctamente");
+    // console.log(userFound);
 
     const userData = await model.findUserById(userFound.PersonaID);
-    console.log(userData);
+    // console.log(userData);
 
     const token = await createAcessToken(userData);
     res.cookie("token", token);
@@ -51,22 +51,33 @@ controllers.login = async (req, res) => {
 };
 
 controllers.verify = async (req, res) => {
-  const { token } = req.cookies;
-  console.log(token);
-  if (!token) return res.status(401).json({ message: "Autorización denegada" });
+  try {
+    const { token } = req.cookies;
+    console.log(token);
+    if (!token)
+      return res.status(401).json({ message: "Autorización denegada" });
 
-  jwt.verify(token, TOKEN_SECRET, async (err, user) => {
-    console.log(user);
-    if (err) return res.status(403).json({ message: "Autorización denegada" });
-    const userFound = await model.findUserById(user.PersonaID);
-    if (!userFound) return res.status(401).json({ message: "Token invalido" });
-    return res.json(userFound);
-  });
+    jwt.verify(token, TOKEN_SECRET, async (err, user) => {
+      // console.log(user);
+      if (err)
+        return res.status(403).json({ message: "Autorización denegada" });
+      const userFound = await model.findUserById(user.PersonaID);
+      if (!userFound)
+        return res.status(401).json({ message: "Token invalido" });
+      return res.json(userFound);
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 controllers.logout = async (req, res) => {
-  res.cookie("token", "", { expires: new Date(0) });
-  return res.sendStatus(200);
+  try {
+    res.cookie("token", "", { expires: new Date(0) });
+    return res.sendStatus(200);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 export default controllers;

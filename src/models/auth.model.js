@@ -13,7 +13,7 @@ model.findUser = async (arg) => {
       type: QueryTypes.SELECT,
     })
     .then(([result]) => {
-      console.log("User found: ", result);
+      // console.log("User found: ", result);
       if (!result || result.length === 0) {
         return null;
       }
@@ -53,8 +53,8 @@ model.insertUser = async (arg) => {
       type: QueryTypes.INSERT,
     })
     .then(([result, metadata]) => {
-      console.log("Inserted: ", result);
-      console.log("Inserted: ", metadata);
+      // console.log("Inserted: ", result);
+      // console.log("Inserted: ", metadata);
       return result;
     })
     .catch((error) => {

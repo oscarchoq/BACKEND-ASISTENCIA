@@ -9,7 +9,7 @@ const controllers = {};
 controllers.findReniec = async (req, res) => {
   try {
     const dni = req.body.dni;
-    console.log("DNI:", dni);
+    // console.log("DNI:", dni);
 
     // Validar formato del DNI
     if (!/^\d{8}$/.test(dni)) {
@@ -40,8 +40,8 @@ controllers.findReniec = async (req, res) => {
 controllers.insertar = async (req, res) => {
   try {
     const data = req.body;
-    console.log("Data:", data);
-    console.log("Nro. de documento:", data.NumeroDocumento);
+    // console.log("Data:", data);
+    // console.log("Nro. de documento:", data.NumeroDocumento);
 
     // Verificar que el nro_documento no está repetido
     const isValidDoc = await model.validarDocumento(data.NumeroDocumento, 0);
@@ -54,7 +54,7 @@ controllers.insertar = async (req, res) => {
       if (!isValidCodigo)
         return res.status(409).json({ error: "Código ya existe" });
     }
-    console.log("pase");
+
     // Verificar que el email_institucional  no están repetidos
     if (data.CorreoInstitucional !== "") {
       const isValidEmail = await model.validarCorreoInstitucional(
@@ -67,13 +67,12 @@ controllers.insertar = async (req, res) => {
           .json({ error: "Correo institucional ya existe" });
     }
 
-    console.log("pase  x2");
     // Insertar en la base de datos
     const persona_id = await model.insertar(data);
     if (persona_id) {
       // Si se registra se procede a registrar en la tabla credenciale
       const password = await bcrypt.hash(data.NumeroDocumento, 10);
-      console.log("Hashed password:", password);
+      // console.log("Hashed password:", password);
       const saveCredencial = await modelAuth.insertUser({
         persona_id,
         password,
@@ -92,7 +91,7 @@ controllers.mostrar = async (req, res) => {
   try {
     // 2 es ESTUDIANTES, 3 es DOCENTES
     const typePerson = req.typePerson;
-    console.log(typePerson);
+    // console.log(typePerson);
     const result = await model.findAll(typePerson);
     if (result) return res.status(200).json(result);
   } catch (error) {
@@ -104,9 +103,9 @@ controllers.mostrarById = async (req, res) => {
   try {
     const { id } = req.params;
     const typePerson = req.typePerson;
-    console.log(typePerson);
+    // console.log(typePerson);
     const result = await model.findById(id, typePerson);
-    console.log("usuario => ", result);
+    // console.log("usuario => ", result);
     if (result) return res.status(200).json(result);
     else return res.status(404).json({ message: "Registro no encontrado" });
   } catch (error) {
@@ -118,23 +117,23 @@ controllers.update = async (req, res) => {
   try {
     const { id } = req.params;
     const data = req.body;
-    console.log("ID:", id);
-    console.log("Data:", data);
+    // console.log("ID:", id);
+    // console.log("Data:", data);
 
     // Verificar que el nro_documento no está repetido
-    console.log("Nro. de documento:", data.NumeroDocumento);
+    // console.log("Nro. de documento:", data.NumeroDocumento);
     const isValidDoc = await model.validarDocumento(data.NumeroDocumento, id);
     if (!isValidDoc)
       return res.status(409).json({ error: "Nro. de documento ya existe" });
 
     // Verificar que el codigo no esta registrado
-    console.log("Codigo:", data.Codigo, id);
+    // console.log("Codigo:", data.Codigo, id);
     const isValidCodigo = await model.validarCodigo(data.Codigo, id);
     if (!isValidCodigo)
       return res.status(409).json({ error: "Código ya existe" });
 
     // Verificar que el email_institucional  no están repetidos
-    console.log("Email institucional:", data.CorreoInstitucional);
+    // console.log("Email institucional:", data.CorreoInstitucional);
     if (data.CorreoInstitucional !== "") {
       const isValidEmail = await model.validarCorreoInstitucional(
         data.CorreoInstitucional,
@@ -160,8 +159,8 @@ controllers.changeStatus = async (req, res) => {
     const { id } = req.params;
     const { Activo } = req.body;
 
-    console.log("ID => ", id);
-    console.log("data => ", Activo);
+    // console.log("ID => ", id);
+    // console.log("data => ", Activo);
     const newStatus = Activo === 0 ? 1 : 0;
     const response = await model.changeStatus(id, newStatus);
     return res.status(200).json({ message: "Estado actualizado" });

@@ -4,7 +4,7 @@ import sequelize from "../config/db.js";
 const model = {};
 
 model.insertar = async (data) => {
-  console.log(data.TipoPersonaID);
+  // console.log(data.TipoPersonaID);
   let sql;
   if (data.TipoPersonaID === 2) {
     sql = `INSERT INTO Persona (TipoDocID, NumeroDocumento, ApellidoPaterno, ApellidoMaterno, Nombres, Sexo, FechaNacimiento, EstadoCivilID, CorreoInstitucional, CorreoPersonal, NumeroCelular, NumeroCelular2, GradoInstruccionID, TipoPersonaID, Codigo, FechaRegistro) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "${data.Codigo}", NOW() )
@@ -31,7 +31,6 @@ model.insertar = async (data) => {
     `;
   }
 
-  console.log("todo good SQLazo => ", sql);
   return sequelize
     .query(sql, {
       // raw: true,
@@ -55,8 +54,8 @@ model.insertar = async (data) => {
       type: QueryTypes.INSERT,
     })
     .then(([result, metadata]) => {
-      console.log("Inserted ID: ", result);
-      console.log("Inserted Rows afected: ", metadata);
+      // console.log("Inserted ID: ", result);
+      // console.log("Inserted Rows afected: ", metadata);
       return result;
     })
     .catch((error) => {
@@ -85,7 +84,7 @@ model.findAll = async (id) => {
       type: QueryTypes.SELECT,
     })
     .then((result) => {
-      console.log("Showed pers RESULT: ", result);
+      // console.log("Showed pers RESULT: ", result);
       return result;
     })
     .catch((error) => {
@@ -96,14 +95,13 @@ model.findAll = async (id) => {
 
 model.findById = async (id, typePerson) => {
   const sql = `SELECT * FROM Persona WHERE TipoPersonaID = ? AND PersonaID =?`;
-  console.log("SQLazo => ", sql);
   return sequelize
     .query(sql, {
       replacements: [typePerson, id],
       type: QueryTypes.SELECT,
     })
     .then((result) => {
-      console.log("Showed pers RESULT: ", result);
+      // console.log("Showed pers RESULT: ", result);
       return result[0];
     })
     .catch((error) => {
@@ -158,10 +156,8 @@ model.update = async (id, data) => {
       raw: true,
     })
     .then(([result, metadata]) => {
-      console.log("Updated person RESULT: ", result);
-      // let info = result.info.split(" "); // convertir respuesta a array
-      // console.log(info);
-      console.log("Updated pers METADA: ", metadata);
+      // console.log("Updated person RESULT: ", result);
+      // console.log("Updated pers METADA: ", metadata);
       return metadata;
     })
     .catch((error) => {
@@ -179,7 +175,7 @@ model.validarDocumento = async (numDocumento, id) => {
       type: QueryTypes.SELECT,
     })
     .then((result) => {
-      console.log("Validated doc RESULT: ", result[0].validarNumDoc);
+      // console.log("Validated doc RESULT: ", result[0].validarNumDoc);
       return result[0].validarNumDoc < 1;
     })
     .catch((error) => {
@@ -197,7 +193,7 @@ model.validarCorreoInstitucional = async (correo, id) => {
       type: QueryTypes.SELECT,
     })
     .then((result) => {
-      console.log("Validated email RESULT: ", result[0].validarCorreoInst);
+      // console.log("Validated email RESULT: ", result[0].validarCorreoInst);
       return result[0].validarCorreoInst < 1;
     })
     .catch((error) => {
@@ -215,7 +211,7 @@ model.validarCodigo = async (codigo, id) => {
       type: QueryTypes.SELECT,
     })
     .then((result) => {
-      console.log("Validated codigo RESULT: ", result[0].validarCodigo);
+      // console.log("Validated codigo RESULT: ", result[0].validarCodigo);
       return result[0].validarCodigo < 1;
     })
     .catch((error) => {
@@ -236,10 +232,8 @@ model.changeStatus = async (id, status) => {
       raw: true,
     })
     .then(([result, metadata]) => {
-      console.log("Updated person RESULT: ", result);
-      // let info = result.info.split(" "); // convertir respuesta a array
-      // console.log(info);
-      console.log("Updated pers METADA: ", metadata);
+      // console.log("Updated person RESULT: ", result);
+      // console.log("Updated pers METADA: ", metadata);
       return metadata;
     })
     .catch((error) => {

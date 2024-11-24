@@ -10,3 +10,4 @@ export const DB_PASSWORD = process.env.DB_PASSWORD || "";
 export const DB_DIALECT = process.env.DB_DIALECT || "mysql";
 export const TOKEN_SECRET = process.env.TOKEN_SECRET || "your-secret-key";
 export const RENIEC_API_KEY = process.env.RENIEC_API_KEY || "";
+export const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
