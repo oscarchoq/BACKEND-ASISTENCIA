@@ -49,10 +49,12 @@ controllers.insertar = async (req, res) => {
       return res.status(409).json({ error: "Nro. de documento ya existe" });
 
     // Verificar que el codigo no esta registrado
-    const isValidCodigo = await model.validarCodigo(data.Codigo, 0);
-    if (!isValidCodigo)
-      return res.status(409).json({ error: "Código ya existe" });
-
+    if (data.TipoPersonaID === 1) {
+      const isValidCodigo = await model.validarCodigo(data.Codigo, 0);
+      if (!isValidCodigo)
+        return res.status(409).json({ error: "Código ya existe" });
+    }
+    console.log("pase");
     // Verificar que el email_institucional  no están repetidos
     if (data.CorreoInstitucional !== "") {
       const isValidEmail = await model.validarCorreoInstitucional(
@@ -65,6 +67,7 @@ controllers.insertar = async (req, res) => {
           .json({ error: "Correo institucional ya existe" });
     }
 
+    console.log("pase  x2");
     // Insertar en la base de datos
     const persona_id = await model.insertar(data);
     if (persona_id) {

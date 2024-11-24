@@ -4,9 +4,34 @@ import sequelize from "../config/db.js";
 const model = {};
 
 model.insertar = async (data) => {
-  const sql = `INSERT INTO Persona (TipoDocID, NumeroDocumento, ApellidoPaterno, ApellidoMaterno, Nombres, Sexo, FechaNacimiento, EstadoCivilID, CorreoInstitucional, CorreoPersonal, NumeroCelular, NumeroCelular2, GradoInstruccionID, TipoPersonaID, Codigo, FechaRegistro) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW() )
-`;
+  console.log(data.TipoPersonaID);
+  let sql;
+  if (data.TipoPersonaID === 2) {
+    sql = `INSERT INTO Persona (TipoDocID, NumeroDocumento, ApellidoPaterno, ApellidoMaterno, Nombres, Sexo, FechaNacimiento, EstadoCivilID, CorreoInstitucional, CorreoPersonal, NumeroCelular, NumeroCelular2, GradoInstruccionID, TipoPersonaID, Codigo, FechaRegistro) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "${data.Codigo}", NOW() )
+    `;
+  } else if (data.TipoPersonaID === 3) {
+    sql = `
+    INSERT INTO Persona (TipoDocID, NumeroDocumento, ApellidoPaterno, ApellidoMaterno, Nombres, Sexo, FechaNacimiento, EstadoCivilID, CorreoInstitucional, CorreoPersonal, NumeroCelular, NumeroCelular2, GradoInstruccionID, TipoPersonaID, Codigo, FechaRegistro)
+    VALUES 
+    ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+      CONCAT(
+        SUBSTRING("${data.ApellidoPaterno}", 1, 1), 
+            SUBSTRING("${data.ApellidoMaterno}", 1, 1), 
+            "-",
+            LPAD(
+          (SELECT AUTO_INCREMENT 
+                FROM information_schema.tables 
+                WHERE table_name = 'Persona' 
+                AND table_schema = DATABASE()),
+                5, "0"
+            )
+      ),
+        NOW()
+    )
+    `;
+  }
 
+  console.log("todo good SQLazo => ", sql);
   return sequelize
     .query(sql, {
       // raw: true,
@@ -25,7 +50,7 @@ model.insertar = async (data) => {
         data.NumeroCelular2 || null,
         data.GradoInstruccionID,
         data.TipoPersonaID,
-        data.Codigo,
+        // data.Codigo,
       ],
       type: QueryTypes.INSERT,
     })
@@ -71,6 +96,7 @@ model.findAll = async (id) => {
 
 model.findById = async (id, typePerson) => {
   const sql = `SELECT * FROM Persona WHERE TipoPersonaID = ? AND PersonaID =?`;
+  console.log("SQLazo => ", sql);
   return sequelize
     .query(sql, {
       replacements: [typePerson, id],
