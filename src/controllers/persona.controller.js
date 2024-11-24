@@ -48,18 +48,22 @@ controllers.insertar = async (req, res) => {
     if (!isValidDoc)
       return res.status(409).json({ error: "Nro. de documento ya existe" });
 
-    // Verificar que el email_institucional y correo_personal no están repetidos
-    const isValidEmail = await model.validarCorreoInstitucional(
-      data.CorreoInstitucional,
-      0
-    );
-    if (!isValidEmail)
-      return res.status(409).json({ error: "Correo institucional ya existe" });
-
     // Verificar que el codigo no esta registrado
     const isValidCodigo = await model.validarCodigo(data.Codigo, 0);
     if (!isValidCodigo)
       return res.status(409).json({ error: "Código ya existe" });
+
+    // Verificar que el email_institucional  no están repetidos
+    if (data.CorreoInstitucional !== "") {
+      const isValidEmail = await model.validarCorreoInstitucional(
+        data.CorreoInstitucional,
+        0
+      );
+      if (!isValidEmail)
+        return res
+          .status(409)
+          .json({ error: "Correo institucional ya existe" });
+    }
 
     // Insertar en la base de datos
     const persona_id = await model.insertar(data);
@@ -120,20 +124,24 @@ controllers.update = async (req, res) => {
     if (!isValidDoc)
       return res.status(409).json({ error: "Nro. de documento ya existe" });
 
-    // Verificar que el email_institucional y correo_personal no están repetidos
-    console.log("Email institucional:", data.CorreoInstitucional);
-    const isValidEmail = await model.validarCorreoInstitucional(
-      data.CorreoInstitucional,
-      id
-    );
-    if (!isValidEmail)
-      return res.status(409).json({ error: "Correo institucional ya existe" });
-
     // Verificar que el codigo no esta registrado
     console.log("Codigo:", data.Codigo, id);
     const isValidCodigo = await model.validarCodigo(data.Codigo, id);
     if (!isValidCodigo)
       return res.status(409).json({ error: "Código ya existe" });
+
+    // Verificar que el email_institucional  no están repetidos
+    console.log("Email institucional:", data.CorreoInstitucional);
+    if (data.CorreoInstitucional !== "") {
+      const isValidEmail = await model.validarCorreoInstitucional(
+        data.CorreoInstitucional,
+        id
+      );
+      if (!isValidEmail)
+        return res
+          .status(409)
+          .json({ error: "Correo institucional ya existe" });
+    }
 
     const result = await model.update(id, data);
     return res.status(200).json({ result: result });
