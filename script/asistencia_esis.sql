@@ -40,7 +40,7 @@ CREATE TABLE `Persona` (
   `TipoPersonaID` int NOT NULL COMMENT 'El rol: admin, estud, prof',
   `Codigo` varchar(11) NOT NULL COMMENT '2021-xxxxxx, AP-000x',
   `Activo` bool DEFAULT true,
-  `FechaRegistro` datetime,
+  `FechaRegistro` datetime DEFAULT current_timestamp(),
   `Eliminado` bool DEFAULT false
 );
 
@@ -68,7 +68,7 @@ VALUES ('DOCUMENTO NACIONAL DE IDENTIDAD'), ('PASAPORTE'), ('CARNET DE EXTRANJER
 
 CREATE TABLE `GradoInstruccion` (
   `GradoInstruccionID` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `Denominacion` varchar(50) NOT NULL,
+  `Denominacion` varchar(64) NOT NULL,
   `Activo` bool DEFAULT true,
   `FechaRegistro` datetime DEFAULT current_timestamp(),
   `Eliminado` bool DEFAULT false
@@ -364,11 +364,11 @@ CREATE TABLE `PeriodoAcademico` (
   `PeriodoID` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `Anio` int(4) NOT NULL,
   `Ciclo` int(1) NOT NULL,
-  `Denominacion` varchar(6) NOT NULL,
+  `Denominacion` varchar(10) NOT NULL,
   `FechaInicio` date NOT NULL,
   `FechaFin` date NOT NULL,
   `Activo` bool DEFAULT true,
-  `FechaRegistro` datetime,
+  `FechaRegistro` datetime DEFAULT current_timestamp(),
   `Eliminado` bool DEFAULT false
 );
 
@@ -381,7 +381,7 @@ CREATE TABLE `AperturaCurso` (
   `CodigoApertura` varchar(6) NOT NULL COMMENT 'Codigo aleatorio para unirse al curso',
   `AprobacionAutomatica` bool DEFAULT true COMMENT 'Inscripcion automatica a un curso',
   `Activo` bool DEFAULT true,
-  `FechaRegistro` datetime,
+  `FechaRegistro` datetime DEFAULT current_timestamp(),
   `Eliminado` bool DEFAULT false
 );
 
@@ -390,7 +390,7 @@ CREATE TABLE `Ubicacion` (
   `NombreLugar` varchar(50),
   `Latitud` decimal NOT NULL,
   `Longitud` decimal NOT NULL,
-  `MargenError` decimal NOT NULL
+  `MargenError` decimal NULL
 );
 
 INSERT INTO `Ubicacion` (`NombreLugar`, `Latitud`, `Longitud`, `MargenError`) 
@@ -402,7 +402,7 @@ CREATE TABLE `Inscripcion` (
   `ClaseID` int NOT NULL,
   `EstudianteID` int NOT NULL,
   `EstadoInscripcion` enum("ACEPTADO","EN ESPERA","RECHAZADO") DEFAULT 'EN ESPERA',
-  `FechaRegistro` datetime,
+  `FechaRegistro` datetime DEFAULT current_timestamp(),
   `Eliminado` bool DEFAULT false
 );
 
@@ -415,7 +415,7 @@ CREATE TABLE `HorarioClase` (
   `Tolerancia` int COMMENT 'Tiempo de tolerancia en minutos',
   `TipoClase` enum("TEORICO","PRACTICO","LABORATORIO") DEFAULT 'TEORICO',
   `Activo` bool DEFAULT true,
-  `FechaRegistro` datetime,
+  `FechaRegistro` datetime DEFAULT current_timestamp(),
   `Eliminado` bool DEFAULT false
 );
 
@@ -423,7 +423,7 @@ CREATE TABLE `SesionClase` (
   `SesionID` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `ClaseID` int NOT NULL,
   `HorarioID` int NOT NULL,
-  `FechaRegistro` datetime,
+  `FechaRegistro` datetime DEFAULT current_timestamp(),
   `Eliminado` bool DEFAULT false
 );
 
@@ -436,7 +436,7 @@ CREATE TABLE `Asistencia` (
   `DispositivoID` varchar(50) NOT NULL,
   `Latitud` decimal(9,6) NOT NULL,
   `Longitud` decimal(9,6) NOT NULL,
-  `FechaRegistro` datetime,
+  `FechaRegistro` datetime DEFAULT current_timestamp(),
   `Eliminado` bool DEFAULT false
 );
 

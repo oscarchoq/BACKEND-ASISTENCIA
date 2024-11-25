@@ -4,6 +4,7 @@ import cors from "cors";
 // Mis rutas
 import authRoutes from "./auth.routes.js";
 import comboRoutes from "./combos.routes.js";
+import academicoRoutes from "./academico.routes.js";
 import personaRoutes from "./persona.routes.js";
 import { FRONTEND_URL } from "../config/config.js";
 
@@ -28,6 +29,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/persona", personaRoutes);
 app.use("/api/v1/combos", comboRoutes);
+app.use("/api/v1/academico", academicoRoutes);
 
 app.use("*", (req, res) => {
   res.status(404).send("Not Found");
