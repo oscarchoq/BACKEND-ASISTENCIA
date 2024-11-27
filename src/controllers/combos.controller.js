@@ -28,4 +28,15 @@ controllers.estadoCivil = async (req, res) => {
   }
 };
 
+controllers.periodo = async (req, res) => {
+  try {
+    console.log("Si llega");
+    const comboFound = await model.findPeriodo();
+    console.log("apunto de retornar");
+    return res.status(200).json(comboFound);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export default controllers;

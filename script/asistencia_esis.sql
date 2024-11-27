@@ -39,6 +39,7 @@ CREATE TABLE `Persona` (
   `GradoInstruccionID` int NOT NULL,
   `TipoPersonaID` int NOT NULL COMMENT 'El rol: admin, estud, prof',
   `Codigo` varchar(11) NOT NULL COMMENT '2021-xxxxxx, AP-000x',
+  `Imagen` text NULL,
   `Activo` bool DEFAULT true,
   `FechaRegistro` datetime DEFAULT current_timestamp(),
   `Eliminado` bool DEFAULT false
@@ -375,8 +376,10 @@ CREATE TABLE `PeriodoAcademico` (
 CREATE TABLE `AperturaCurso` (
   `AperturaCursoID` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `CursoID` int NOT NULL,
-  `DocenteID` int NOT NULL,
+  `DocenteID` int NULL,
   `PeriodoID` int NOT NULL,
+  `Turno` ENUM("M", "T"),
+  `Grupo` ENUM("A", "B"),
   `UbicacionID` int NOT NULL,
   `CodigoApertura` varchar(6) NOT NULL COMMENT 'Codigo aleatorio para unirse al curso',
   `AprobacionAutomatica` bool DEFAULT true COMMENT 'Inscripcion automatica a un curso',

@@ -48,4 +48,22 @@ model.findEstadoCivil = async () => {
     });
 };
 
+model.findPeriodo = async () => {
+  return sequelize
+    .query(
+      `SELECT PeriodoID, CONCAT(Anio, "-", Ciclo) AS Denominacion FROM periodoacademico`,
+      {
+        type: QueryTypes.SELECT,
+      }
+    )
+    .then((result) => {
+      // console.log(result);
+      const data = result.length === 0 ? null : result;
+      return data;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
 export default model;
