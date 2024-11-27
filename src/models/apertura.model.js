@@ -3,17 +3,25 @@ import sequelize from "../config/db.js";
 
 const model = {};
 
-model.findAll = async (semestreID, palabra) => {
-  const sql = `SELECT CursoID, SemestreID, Denominacion, RefAcademica FROM curso
-                WHERE (SemestreID = ${semestreID} OR ${semestreID} IS NULL)
-                AND Denominacion LIKE "%${palabra}%"
+model.findAll = async (semestreID) => {
+  const sql = `
+  SELECT 
+    ac.AperturaCursoID, ac.CursoID, ac.PeriodoID,
+    c.RefAcademica As "Codigo", c.Denominacion AS "Asignatura",
+    CONCAT(ac.Turno, "-", ac.Grupo) AS "T/G",
+    ac.DocenteID, CONCAT(p.ApellidoPaterno, " ", p.ApellidoMaterno, " ", p.Nombres) AS "Docente",
+    (SELECT COUNT(*) FROM inscripcion i WHERE i.ClaseID = ac.AperturaCursoID) AS "Matriculados"
+  FROM aperturacurso AS ac
+  LEFT JOIN curso AS c ON c.CursoID = ac.CursoID
+  LEFT JOIN Persona AS p ON p.PersonaID = ac.DocenteID
+  WHERE PeriodoID = ${semestreID}
 `;
   return sequelize
     .query(sql, {
       type: QueryTypes.SELECT,
     })
     .then((result) => {
-      // console.log("Showed pers RESULT: ", result);
+      console.log("Showed pers RESULT: ", result);
       return result;
     })
     .catch((error) => {

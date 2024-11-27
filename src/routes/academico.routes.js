@@ -16,6 +16,6 @@ router.post("/periodo/:id/status", CcontrollerPeriodo.changeStatus);
 router.get("/curso", ControllerCurso.mostrar);
 
 // APERTURA DE GRUPOS
+router.get("/apertura", ControllerApertura.mostrar);
 router.post("/apertura", ControllerApertura.insertar);
-// router.get("/apertura", ControllerApertura.mostrar);
 export default router;

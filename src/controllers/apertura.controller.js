@@ -3,6 +3,19 @@ import model from "../models/apertura.model.js";
 
 const controllers = {};
 
+controllers.mostrar = async (req, res) => {
+  try {
+    const semestreID = req.query.semestre ? parseInt(req.query.semestre) : null;
+    console.log(semestreID);
+
+    const result = await model.findAll(semestreID);
+    console.log(result);
+    if (result) return res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
 controllers.insertar = async (req, res) => {
   try {
     const data = { ...req.body, DocenteID: "" };
