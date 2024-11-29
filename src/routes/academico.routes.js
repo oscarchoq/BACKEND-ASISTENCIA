@@ -19,5 +19,6 @@ router.get("/curso", ControllerCurso.mostrar);
 router.get("/apertura", ControllerApertura.mostrar);
 router.post("/apertura", ControllerApertura.insertar);
 router.post("/apertura/:id", ControllerApertura.update);
+router.post("/apertura/:id/docente", ControllerApertura.updateDocente);
 
 export default router;

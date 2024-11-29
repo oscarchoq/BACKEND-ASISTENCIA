@@ -39,11 +39,26 @@ controllers.update = async (req, res) => {
   try {
     const { id } = req.params;
     const data = req.body;
-    console.log(": UPDATE data apertura: ", data);
-    console.log(": UPDATE id apertura: ", id);
+    // console.log(": UPDATE data apertura: ", data);
+    // console.log(": UPDATE id apertura: ", id);
 
     const result = await model.update(id, data);
-    console.log(result);
+    // console.log(result);
+    return res.status(200).json({ result: result });
+  } catch (error) {
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+controllers.updateDocente = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    // console.log(": UPDATE data apertura docente: ", data);
+    // console.log(": UPDATE id apertura docente: ", id);
+
+    const result = await model.updateDocente(id, data);
+    // console.log(result);
     return res.status(200).json({ result: result });
   } catch (error) {
     res.status(500).json({ error: "Error interno del servidor" });

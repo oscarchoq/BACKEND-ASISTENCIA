@@ -98,4 +98,27 @@ model.update = async (id, data) => {
     });
 };
 
+model.updateDocente = async (id, data) => {
+  console.log(":model UPDATE data: ", data);
+  const sql = `UPDATE aperturacurso
+              SET DocenteID = ?
+              WHERE AperturaCursoID = ?
+              `;
+  return sequelize
+    .query(sql, {
+      replacements: [data.DocenteID, id],
+      type: QueryTypes.UPDATE,
+      raw: true,
+    })
+    .then(([result, metadata]) => {
+      console.log("Updated person RESULT: ", result);
+      console.log("Updated pers METADA: ", metadata);
+      return metadata;
+    })
+    .catch((error) => {
+      console.log("error model => ", error);
+      throw error;
+    });
+};
+
 export default model;
