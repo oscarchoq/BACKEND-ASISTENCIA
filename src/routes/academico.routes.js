@@ -18,4 +18,6 @@ router.get("/curso", ControllerCurso.mostrar);
 // APERTURA DE GRUPOS
 router.get("/apertura", ControllerApertura.mostrar);
 router.post("/apertura", ControllerApertura.insertar);
+router.post("/apertura/:id", ControllerApertura.update);
+
 export default router;

@@ -18,7 +18,7 @@ controllers.mostrar = async (req, res) => {
 
 controllers.insertar = async (req, res) => {
   try {
-    const data = { ...req.body, DocenteID: "" };
+    const data = { ...req.body };
     console.log("INS data apertura: ", data);
 
     const CodigoApertura = generarCodigoUnico();
@@ -30,6 +30,21 @@ controllers.insertar = async (req, res) => {
     console.log("result => ", saveApertura);
     if (saveApertura)
       return res.status(200).json({ message: "Registro completado" });
+  } catch (error) {
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+controllers.update = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    console.log(": UPDATE data apertura: ", data);
+    console.log(": UPDATE id apertura: ", id);
+
+    const result = await model.update(id, data);
+    console.log(result);
+    return res.status(200).json({ result: result });
   } catch (error) {
     res.status(500).json({ error: "Error interno del servidor" });
   }

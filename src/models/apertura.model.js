@@ -6,7 +6,7 @@ const model = {};
 model.findAll = async (semestreID) => {
   const sql = `
   SELECT 
-    ac.AperturaCursoID, ac.CursoID, ac.PeriodoID,
+    ac.AperturaCursoID, ac.CursoID, ac.PeriodoID, ac.Turno, ac.Grupo,
     c.RefAcademica As "Codigo", c.Denominacion AS "Asignatura",
     CONCAT(ac.Turno, "-", ac.Grupo) AS "T/G",
     ac.DocenteID, CONCAT(p.ApellidoPaterno, " ", p.ApellidoMaterno, " ", p.Nombres) AS "Docente",
@@ -58,6 +58,42 @@ VALUES (?, ?, ?, ?, ?, 1, ?)
     })
     .catch((error) => {
       console.log("Error: ", error);
+      throw error;
+    });
+};
+
+model.update = async (id, data) => {
+  console.log(":model UPDATE data: ", data);
+  const docenteID = data.DocenteID || null;
+  console.log(":Docente id", docenteID);
+  const sql = `UPDATE aperturacurso
+                SET 
+                  PeriodoID = ?,
+                  CursoID = ?,
+                  DocenteID = ?,
+                  Turno = ?,
+                  Grupo = ?
+                WHERE AperturaCursoID = ?`;
+  return sequelize
+    .query(sql, {
+      replacements: [
+        data.Periodo,
+        data.CursoID,
+        docenteID,
+        data.Turno,
+        data.Grupo,
+        id,
+      ],
+      type: QueryTypes.UPDATE,
+      raw: true,
+    })
+    .then(([result, metadata]) => {
+      console.log("Updated person RESULT: ", result);
+      console.log("Updated pers METADA: ", metadata);
+      return metadata;
+    })
+    .catch((error) => {
+      console.log("error model => ", error);
       throw error;
     });
 };
