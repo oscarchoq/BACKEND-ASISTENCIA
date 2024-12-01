@@ -10,7 +10,7 @@ model.findAll = async (semestreID) => {
     c.RefAcademica As "Codigo", c.Denominacion AS "Asignatura",
     CONCAT(ac.Turno, "-", ac.Grupo) AS "T/G",
     ac.DocenteID, CONCAT(p.ApellidoPaterno, " ", p.ApellidoMaterno, " ", p.Nombres) AS "Docente",
-    (SELECT COUNT(*) FROM inscripcion i WHERE i.ClaseID = ac.AperturaCursoID) AS "Matriculados"
+    (SELECT COUNT(*) FROM Inscripcion i WHERE i.ClaseID = ac.AperturaCursoID) AS "Matriculados"
   FROM AperturaCurso AS ac
   LEFT JOIN Curso AS c ON c.CursoID = ac.CursoID
   LEFT JOIN Persona AS p ON p.PersonaID = ac.DocenteID
