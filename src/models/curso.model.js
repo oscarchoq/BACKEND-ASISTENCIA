@@ -4,7 +4,7 @@ import sequelize from "../config/db.js";
 const model = {};
 
 model.findAll = async (semestreID, palabra) => {
-  const sql = `SELECT CursoID, SemestreID, Denominacion, RefAcademica FROM curso
+  const sql = `SELECT CursoID, SemestreID, Denominacion, RefAcademica FROM Curso
                 WHERE (SemestreID = ${semestreID} OR ${semestreID} IS NULL)
                 AND Denominacion LIKE "%${palabra}%"
 `;

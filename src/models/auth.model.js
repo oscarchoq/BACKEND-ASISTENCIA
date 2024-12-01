@@ -35,7 +35,7 @@ model.findUserById = async (arg) => {
       type: QueryTypes.SELECT,
     })
     .then(([result, metadata]) => {
-      const data = result.length === 0 ? null : result;
+      const data = result?.length === 0 ? null : result;
       return data;
     })
     .catch((error) => {

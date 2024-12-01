@@ -14,11 +14,11 @@ model.findAll = async (tipo, id) => {
                 ac.AperturaCursoID,  
                 CONCAT(pa.Denominacion, " ",  c.Denominacion, "-", ac.Grupo) AS Asignatura,
                 CONCAT(p.ApellidoPaterno, " ", p.ApellidoMaterno, " ", p.Nombres) AS Docente
-              FROM inscripcion AS i
-              INNER JOIN aperturacurso AS ac ON ac.AperturaCursoID = i.ClaseID
-              INNER JOIN curso AS c ON c.CursoID = ac.CursoID
-              INNER JOIN periodoacademico AS pa ON pa.PeriodoID = ac.PeriodoID
-              LEFT JOIN persona AS p ON p.PersonaID = ac.DocenteID
+              FROM Inscripcion AS i
+              INNER JOIN AperturaCurso AS ac ON ac.AperturaCursoID = i.ClaseID
+              INNER JOIN Curso AS c ON c.CursoID = ac.CursoID
+              INNER JOIN PeriodoAcademico AS pa ON pa.PeriodoID = ac.PeriodoID
+              LEFT JOIN Persona AS p ON p.PersonaID = ac.DocenteID
 `;
   sql += where;
   return sequelize

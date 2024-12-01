@@ -11,7 +11,7 @@ model.findAll = async () => {
                     WHEN Activo = 1 THEN "ACTIVO"
                     WHEN Activo = 0 THEN "DESACTIVO"
                   END AS Estado
-                FROM periodoacademico
+                FROM PeriodoAcademico
                 WHERE Eliminado = 0`;
   return sequelize
     .query(sql, {
@@ -28,7 +28,7 @@ model.findAll = async () => {
 };
 
 model.save = async (data) => {
-  const sql = `INSERT INTO periodoacademico (Anio, Ciclo, Denominacion, FechaInicio, FechaFin)
+  const sql = `INSERT INTO PeriodoAcademico (Anio, Ciclo, Denominacion, FechaInicio, FechaFin)
               VALUES (?, ?, ?, ?, ?);`;
 
   return sequelize
@@ -72,7 +72,7 @@ model.findById = async (id) => {
 
 model.update = async (id, data) => {
   const sql = `
-    UPDATE periodoacademico
+    UPDATE PeriodoAcademico
     SET 
       Anio = ?,
       Ciclo = ?,
@@ -127,7 +127,7 @@ model.validarPeriodo = async (Anio, Ciclo, id) => {
 // Chagen status ACTIVO
 model.changeStatus = async (id, status) => {
   const sql = `
-  UPDATE periodoacademico 
+  UPDATE PeriodoAcademico 
   SET ACTIVO = ?
   WHERE PeriodoID = ?
   `;

@@ -11,8 +11,8 @@ model.findAll = async (semestreID) => {
     CONCAT(ac.Turno, "-", ac.Grupo) AS "T/G",
     ac.DocenteID, CONCAT(p.ApellidoPaterno, " ", p.ApellidoMaterno, " ", p.Nombres) AS "Docente",
     (SELECT COUNT(*) FROM inscripcion i WHERE i.ClaseID = ac.AperturaCursoID) AS "Matriculados"
-  FROM aperturacurso AS ac
-  LEFT JOIN curso AS c ON c.CursoID = ac.CursoID
+  FROM AperturaCurso AS ac
+  LEFT JOIN Curso AS c ON c.CursoID = ac.CursoID
   LEFT JOIN Persona AS p ON p.PersonaID = ac.DocenteID
   WHERE PeriodoID = ${semestreID}
 `;
@@ -34,7 +34,7 @@ model.save = async (data, CodigoApertura) => {
   const docenteID = data.DocenteID || null;
   // console.log("desde model", data);
   const sql = `
-INSERT INTO aperturacurso (CursoID, DocenteID, PeriodoID, Turno, Grupo, UbicacionID, CodigoApertura)
+INSERT INTO AperturaCurso (CursoID, DocenteID, PeriodoID, Turno, Grupo, UbicacionID, CodigoApertura)
 VALUES (?, ?, ?, ?, ?, 1, ?)
 `;
   return sequelize
@@ -62,7 +62,7 @@ VALUES (?, ?, ?, ?, ?, 1, ?)
 
 model.update = async (id, data) => {
   const docenteID = data.DocenteID || null;
-  const sql = `UPDATE aperturacurso
+  const sql = `UPDATE AperturaCurso
                 SET 
                   PeriodoID = ?,
                   CursoID = ?,
@@ -95,7 +95,7 @@ model.update = async (id, data) => {
 };
 
 model.updateDocente = async (id, data) => {
-  const sql = `UPDATE aperturacurso
+  const sql = `UPDATE AperturaCurso
               SET DocenteID = ?
               WHERE AperturaCursoID = ?
               `;
@@ -117,7 +117,7 @@ model.updateDocente = async (id, data) => {
 };
 
 model.findCode = async (code) => {
-  const sql = `SELECT AperturaCursoID, AprobacionAutomatica FROM aperturacurso
+  const sql = `SELECT AperturaCursoID, AprobacionAutomatica FROM AperturaCurso
               WHERE CodigoApertura = ?`;
   return sequelize
     .query(sql, {

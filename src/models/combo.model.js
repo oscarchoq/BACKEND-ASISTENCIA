@@ -10,7 +10,7 @@ model.findGradoInstruccion = async () => {
     })
     .then((result) => {
       // console.log(result);
-      const data = result.length === 0 ? null : result;
+      const data = result.length === 0 ? [] : result;
       return data;
     })
     .catch((error) => {
@@ -25,7 +25,7 @@ model.findTipoDocumento = async () => {
     })
     .then((result) => {
       // console.log(result);
-      const data = result.length === 0 ? null : result;
+      const data = result.length === 0 ? [] : result;
       return data;
     })
     .catch((error) => {
@@ -40,7 +40,7 @@ model.findEstadoCivil = async () => {
     })
     .then((result) => {
       // console.log(result);
-      const data = result.length === 0 ? null : result;
+      const data = result.length === 0 ? [] : result;
       return data;
     })
     .catch((error) => {
@@ -51,14 +51,14 @@ model.findEstadoCivil = async () => {
 model.findPeriodo = async () => {
   return sequelize
     .query(
-      `SELECT PeriodoID, CONCAT(Anio, "-", Ciclo) AS Denominacion FROM periodoacademico`,
+      `SELECT PeriodoID, CONCAT(Anio, "-", Ciclo) AS Denominacion FROM PeriodoAcademico`,
       {
         type: QueryTypes.SELECT,
       }
     )
     .then((result) => {
       // console.log(result);
-      const data = result.length === 0 ? null : result;
+      const data = result.length === 0 ? [] : result;
       return data;
     })
     .catch((error) => {

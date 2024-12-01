@@ -5,7 +5,7 @@ const model = {};
 
 model.save = async (ClaseID, EstudianteID, EstadoInscripcion) => {
   // console.log(ClaseID, EstudianteID, EstadoInscripcion);
-  const sql = `INSERT INTO inscripcion (ClaseID, EstudianteID, EstadoInscripcion)
+  const sql = `INSERT INTO Inscripcion (ClaseID, EstudianteID, EstadoInscripcion)
             VALUES (?, ?, ? )`;
   return sequelize
     .query(sql, {
@@ -24,7 +24,7 @@ model.save = async (ClaseID, EstudianteID, EstadoInscripcion) => {
 };
 
 model.findOne = async (ClaseID, EstudianteID) => {
-  const sql = `SELECT EstadoInscripcion FROM inscripcion
+  const sql = `SELECT EstadoInscripcion FROM Inscripcion
             WHERE ClaseID = ? AND EstudianteID = ?`;
   return sequelize
     .query(sql, {
@@ -42,7 +42,7 @@ model.findOne = async (ClaseID, EstudianteID) => {
 };
 
 model.update = async (InscripcionID, newEstado) => {
-  const sql = `UPDATE inscripcion 
+  const sql = `UPDATE Inscripcion 
               SET EstadoInscripcion = ?
               WHERE InscripcionID = ?`;
 
