@@ -59,7 +59,7 @@ model.insertar = async (data) => {
       return result;
     })
     .catch((error) => {
-      console.log("Error: ", error);
+      // console.log("Error: ", error);
       throw error;
     });
 };
@@ -88,7 +88,7 @@ model.findAll = async (id) => {
       return result;
     })
     .catch((error) => {
-      console.log("Error: ", error);
+      // console.log("Error: ", error);
       throw error;
     });
 };
@@ -105,7 +105,7 @@ model.findById = async (id, typePerson) => {
       return result[0];
     })
     .catch((error) => {
-      console.log("Error: ", error);
+      // console.log("Error: ", error);
       throw error;
     });
 };

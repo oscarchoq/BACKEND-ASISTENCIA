@@ -21,24 +21,22 @@ model.findAll = async (semestreID) => {
       type: QueryTypes.SELECT,
     })
     .then((result) => {
-      console.log("Showed pers RESULT: ", result);
+      // console.log("Showed pers RESULT: ", result);
       return result;
     })
     .catch((error) => {
-      console.log("Error: ", error);
+      // console.log("Error: ", error);
       throw error;
     });
 };
 
 model.save = async (data, CodigoApertura) => {
   const docenteID = data.DocenteID || null;
-  console.log("desde model", data);
+  // console.log("desde model", data);
   const sql = `
 INSERT INTO aperturacurso (CursoID, DocenteID, PeriodoID, Turno, Grupo, UbicacionID, CodigoApertura)
 VALUES (?, ?, ?, ?, ?, 1, ?)
 `;
-  console.log("sql,", sql);
-  console.log(docenteID);
   return sequelize
     .query(sql, {
       replacements: [
@@ -52,20 +50,18 @@ VALUES (?, ?, ?, ?, ?, 1, ?)
       type: QueryTypes.INSERT,
     })
     .then(([result, metadata]) => {
-      console.log("Inserted ID: ", result);
-      console.log("Inserted Rows afected: ", metadata);
+      // console.log("Inserted ID: ", result);
+      // console.log("Inserted Rows afected: ", metadata);
       return result;
     })
     .catch((error) => {
-      console.log("Error: ", error);
+      // console.log("Error: ", error);
       throw error;
     });
 };
 
 model.update = async (id, data) => {
-  console.log(":model UPDATE data: ", data);
   const docenteID = data.DocenteID || null;
-  console.log(":Docente id", docenteID);
   const sql = `UPDATE aperturacurso
                 SET 
                   PeriodoID = ?,
@@ -88,18 +84,17 @@ model.update = async (id, data) => {
       raw: true,
     })
     .then(([result, metadata]) => {
-      console.log("Updated person RESULT: ", result);
-      console.log("Updated pers METADA: ", metadata);
+      // console.log("Updated person RESULT: ", result);
+      // console.log("Updated pers METADA: ", metadata);
       return metadata;
     })
     .catch((error) => {
-      console.log("error model => ", error);
+      // console.log("error model => ", error);
       throw error;
     });
 };
 
 model.updateDocente = async (id, data) => {
-  console.log(":model UPDATE data: ", data);
   const sql = `UPDATE aperturacurso
               SET DocenteID = ?
               WHERE AperturaCursoID = ?
@@ -111,12 +106,12 @@ model.updateDocente = async (id, data) => {
       raw: true,
     })
     .then(([result, metadata]) => {
-      console.log("Updated person RESULT: ", result);
-      console.log("Updated pers METADA: ", metadata);
+      // console.log("Updated person RESULT: ", result);
+      // console.log("Updated pers METADA: ", metadata);
       return metadata;
     })
     .catch((error) => {
-      console.log("error model => ", error);
+      // console.log("error model => ", error);
       throw error;
     });
 };
@@ -134,7 +129,7 @@ model.findCode = async (code) => {
       return result.length > 0 ? result[0] : null;
     })
     .catch((error) => {
-      console.log("Error: ", error);
+      // console.log("Error: ", error);
       throw error;
     });
 };

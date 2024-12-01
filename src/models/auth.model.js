@@ -28,7 +28,7 @@ model.findUserById = async (arg) => {
   const sql = `SELECT PersonaID, Nombres, ApellidoPaterno, ApellidoMaterno, CorreoInstitucional, TipoPersonaID
                 FROM Persona
                 WHERE PersonaID = :id`;
-  console.log("User found: ", arg);
+  // console.log("User found: ", arg);
   return sequelize
     .query(sql, {
       replacements: { id: arg },
@@ -44,7 +44,7 @@ model.findUserById = async (arg) => {
 };
 
 model.insertUser = async (arg) => {
-  console.log("Inserting user: ", arg);
+  // console.log("Inserting user: ", arg);
   const sql = `INSERT INTO Credenciales (PersonaID, Password)
                 VALUES (?, ?)`;
   return sequelize
@@ -58,7 +58,7 @@ model.insertUser = async (arg) => {
       return result;
     })
     .catch((error) => {
-      console.log("Error: ", error);
+      // console.log("Error: ", error);
       throw error;
     });
 };

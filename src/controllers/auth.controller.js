@@ -43,7 +43,12 @@ controllers.login = async (req, res) => {
     // console.log(userData);
 
     const token = await createAcessToken(userData);
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Solo en producción, usa HTTPS
+      sameSite: "None",
+      maxAge: 1000 * 60 * 60 * 6, // expiracion 6h
+    });
     res.json(userData);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -53,7 +58,6 @@ controllers.login = async (req, res) => {
 controllers.verify = async (req, res) => {
   try {
     const { token } = req.cookies;
-    console.log(token);
     if (!token)
       return res.status(401).json({ message: "Autorización denegada" });
 
@@ -73,7 +77,12 @@ controllers.verify = async (req, res) => {
 
 controllers.logout = async (req, res) => {
   try {
-    res.cookie("token", "", { expires: new Date(0) });
+    res.cookie("token", "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "None",
+      expires: new Date(0), // Elimina la cookie
+    });
     return res.sendStatus(200);
   } catch (error) {
     res.status(500).json({ message: error.message });

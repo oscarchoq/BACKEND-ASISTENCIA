@@ -4,7 +4,6 @@ const controllers = {};
 
 controllers.mostrar = async (req, res) => {
   try {
-    console.log("sex");
     const result = await model.findAll();
     if (result) return res.status(200).json(result);
   } catch (error) {
@@ -21,7 +20,7 @@ controllers.insertar = async (req, res) => {
     if (!isValid) return res.status(409).json({ error: "Periodo ya existe" });
 
     const savePeriodo = await model.save(data);
-    console.log("result => ", savePeriodo);
+    // console.log("result => ", savePeriodo);
     if (savePeriodo)
       return res.status(200).json({ message: "Registro completado" });
   } catch (error) {

@@ -17,7 +17,7 @@ model.findAll = async (semestreID, palabra) => {
       return result;
     })
     .catch((error) => {
-      console.log("Error: ", error);
+      // console.log("Error: ", error);
       throw error;
     });
 };

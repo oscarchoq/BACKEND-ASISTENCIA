@@ -5,11 +5,11 @@ const controllers = {};
 controllers.mostrar = async (req, res) => {
   try {
     // http://localhost:3000/api/v1/academico/curso?semestre=8&&search=web
-    console.log("curso");
+    // console.log("curso");
     const semestreID = req.query.semestre ? parseInt(req.query.semestre) : null;
     const search = req.query.search ? req.query.search : "";
-    console.log(semestreID);
-    console.log(search);
+    // console.log(semestreID);
+    // console.log(search);
     const result = await model.findAll(semestreID, search);
     if (result) return res.status(200).json(result);
   } catch (error) {

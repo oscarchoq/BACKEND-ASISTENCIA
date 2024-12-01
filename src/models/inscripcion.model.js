@@ -4,7 +4,7 @@ import sequelize from "../config/db.js";
 const model = {};
 
 model.save = async (ClaseID, EstudianteID, EstadoInscripcion) => {
-  console.log(ClaseID, EstudianteID, EstadoInscripcion);
+  // console.log(ClaseID, EstudianteID, EstadoInscripcion);
   const sql = `INSERT INTO inscripcion (ClaseID, EstudianteID, EstadoInscripcion)
             VALUES (?, ?, ? )`;
   return sequelize
@@ -18,7 +18,7 @@ model.save = async (ClaseID, EstudianteID, EstadoInscripcion) => {
       return result;
     })
     .catch((error) => {
-      console.log("Error: ", error);
+      // console.log("Error: ", error);
       throw error;
     });
 };
@@ -36,7 +36,7 @@ model.findOne = async (ClaseID, EstudianteID) => {
       return result.length > 0 ? result[0] : null;
     })
     .catch((error) => {
-      console.log("Error: ", error);
+      // console.log("Error: ", error);
       throw error;
     });
 };

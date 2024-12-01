@@ -22,13 +22,12 @@ model.findAll = async () => {
       return result;
     })
     .catch((error) => {
-      console.log("Error: ", error);
+      // console.log("Error: ", error);
       throw error;
     });
 };
 
 model.save = async (data) => {
-  console.log(data);
   const sql = `INSERT INTO periodoacademico (Anio, Ciclo, Denominacion, FechaInicio, FechaFin)
               VALUES (?, ?, ?, ?, ?);`;
 
@@ -44,12 +43,12 @@ model.save = async (data) => {
       type: QueryTypes.INSERT,
     })
     .then(([result, metadata]) => {
-      console.log("Inserted ID: ", result);
-      console.log("Inserted Rows afected: ", metadata);
+      // console.log("Inserted ID: ", result);
+      // console.log("Inserted Rows afected: ", metadata);
       return result;
     })
     .catch((error) => {
-      console.log("Error: ", error);
+      // console.log("Error: ", error);
       throw error;
     });
 };
@@ -66,7 +65,7 @@ model.findById = async (id) => {
       return result[0];
     })
     .catch((error) => {
-      console.log("Error: ", error);
+      // console.log("Error: ", error);
       throw error;
     });
 };
