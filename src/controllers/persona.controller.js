@@ -49,7 +49,7 @@ controllers.insertar = async (req, res) => {
       return res.status(409).json({ error: "Nro. de documento ya existe" });
 
     // Verificar que el codigo no esta registrado
-    if (data.TipoPersonaID === 1) {
+    if (data.TipoPersonaID === 2) {
       const isValidCodigo = await model.validarCodigo(data.Codigo, 0);
       if (!isValidCodigo)
         return res.status(409).json({ error: "Código ya existe" });
