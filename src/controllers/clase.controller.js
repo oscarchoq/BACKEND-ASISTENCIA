@@ -77,7 +77,7 @@ controllers.UDPestadoInscripcion = async (req, res) => {
 controllers.findAll = async (req, res) => {
   try {
     const user = req.user;
-    console.log(user);
+    // console.log(user);
     const result = await modelClase.findAll(
       user?.TipoPersonaID,
       user?.PersonaID
