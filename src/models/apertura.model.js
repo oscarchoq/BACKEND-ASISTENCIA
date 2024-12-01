@@ -6,7 +6,7 @@ const model = {};
 model.findAll = async (semestreID) => {
   const sql = `
   SELECT 
-    ac.AperturaCursoID, ac.CursoID, ac.PeriodoID, ac.Turno, ac.Grupo,
+    ac.AperturaCursoID, ac.CursoID, ac.PeriodoID, ac.Turno, ac.Grupo, ac.CodigoApertura,
     c.RefAcademica As "Codigo", c.Denominacion AS "Asignatura",
     CONCAT(ac.Turno, "-", ac.Grupo) AS "T/G",
     ac.DocenteID, CONCAT(p.ApellidoPaterno, " ", p.ApellidoMaterno, " ", p.Nombres) AS "Docente",
@@ -22,7 +22,8 @@ model.findAll = async (semestreID) => {
     })
     .then((result) => {
       // console.log("Showed pers RESULT: ", result);
-      return result;
+      const data = result?.length === 0 ? [] : result;
+      return data;
     })
     .catch((error) => {
       // console.log("Error: ", error);
