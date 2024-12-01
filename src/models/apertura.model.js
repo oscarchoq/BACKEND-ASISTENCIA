@@ -121,4 +121,22 @@ model.updateDocente = async (id, data) => {
     });
 };
 
+model.findCode = async (code) => {
+  const sql = `SELECT AperturaCursoID, AprobacionAutomatica FROM aperturacurso
+              WHERE CodigoApertura = ?`;
+  return sequelize
+    .query(sql, {
+      type: QueryTypes.SELECT,
+      replacements: [code],
+    })
+    .then((result) => {
+      // console.log("Showed pers RESULT: ", result);
+      return result.length > 0 ? result[0] : null;
+    })
+    .catch((error) => {
+      console.log("Error: ", error);
+      throw error;
+    });
+};
+
 export default model;
