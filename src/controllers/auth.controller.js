@@ -46,7 +46,7 @@ controllers.login = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // Solo en producción, usa HTTPS
-      sameSite: "None",
+      // sameSite: "None",
       maxAge: 1000 * 60 * 60 * 6, // expiracion 6h
     });
     res.json(userData);
@@ -80,7 +80,7 @@ controllers.logout = async (req, res) => {
     res.cookie("token", "", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "None",
+      // sameSite: "None",
       expires: new Date(0), // Elimina la cookie
     });
     return res.sendStatus(200);

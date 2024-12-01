@@ -1,5 +1,6 @@
 import modelInscripcion from "../models/inscripcion.model.js";
 import modelApertura from "../models/apertura.model.js";
+import modelClase from "../models/clase.controller.js";
 
 const controllers = {};
 
@@ -68,6 +69,20 @@ controllers.UDPestadoInscripcion = async (req, res) => {
     return res
       .status(200)
       .json({ message: "Estado de inscripcion actualizado" });
+  } catch (error) {
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+controllers.findAll = async (req, res) => {
+  try {
+    const user = req.user;
+    console.log(user);
+    const result = await modelClase.findAll(
+      user?.TipoPersonaID,
+      user?.PersonaID
+    );
+    if (result) return res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ error: "Error interno del servidor" });
   }
