@@ -88,4 +88,17 @@ controllers.findAll = async (req, res) => {
   }
 };
 
+controllers.findOne = async (req, res) => {
+  try {
+    // console.log(user);
+    console.log("llega");
+    const { id } = req.params;
+    console.log(id);
+    const result = await modelClase.findOne(id);
+    if (result) return res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
 export default controllers;

@@ -36,4 +36,31 @@ model.findAll = async (tipo, id) => {
     });
 };
 
+model.findOne = async (id) => {
+  const sql = `SELECT 
+                ac.AperturaCursoID, ac.CodigoApertura, ac.AprobacionAutomatica,
+                CONCAT(pa.Denominacion, " ",  c.Denominacion, "-", ac.Grupo) AS Asignatura,
+                CONCAT(p.Nombres, " ", p.ApellidoPaterno, " ", p.ApellidoMaterno ) AS Docente
+              FROM AperturaCurso AS ac
+              INNER JOIN Curso AS c ON c.CursoID = ac.CursoID
+              INNER JOIN PeriodoAcademico AS pa ON pa.PeriodoID = ac.PeriodoID
+              LEFT JOIN Persona AS p ON p.PersonaID = ac.DocenteID
+              WHERE ac.AperturaCursoID = ?
+`;
+  return sequelize
+    .query(sql, {
+      type: QueryTypes.SELECT,
+      replacements: [id],
+    })
+    .then((result) => {
+      // console.log("Showed pers RESULT: ", result);
+      const data = result?.length === 0 ? [] : result;
+      return data;
+    })
+    .catch((error) => {
+      // console.log("Error: ", error);
+      throw error;
+    });
+};
+
 export default model;
