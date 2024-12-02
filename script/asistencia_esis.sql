@@ -425,7 +425,13 @@ CREATE TABLE `HorarioClase` (
 CREATE TABLE `SesionClase` (
   `SesionID` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `ClaseID` int NOT NULL,
-  `HorarioID` int NOT NULL,
+  `DiaSemana` varchar(20) NULL,
+  `FechaSesion` DATE NOT NULL,
+  `HoraInicio` time NULL,
+  `HoraFin` time NULL,
+  `Tolerancia` int COMMENT 'Tiempo de tolerancia en minutos',
+  `TipoClase` enum("TEORICO","PRACTICO","LABORATORIO") DEFAULT 'TEORICO',
+  `CodigoSesion` varchar(6) NULL COMMENT 'Codigo aleatorio para marcar asistencia',
   `FechaRegistro` datetime DEFAULT current_timestamp(),
   `Eliminado` bool DEFAULT false
 );
@@ -451,7 +457,6 @@ ALTER TABLE `Persona` ADD FOREIGN KEY (`EstadoCivilID`) REFERENCES `EstadoCivil`
 
 ALTER TABLE `Persona` ADD FOREIGN KEY (`TipoPersonaID`) REFERENCES `TipoPersona` (`TipoPersonaID`);
 
-
 ALTER TABLE `Escuela` ADD FOREIGN KEY (`FacultadID`) REFERENCES `Facultad` (`FacultadID`);
 
 ALTER TABLE `Curso` ADD FOREIGN KEY (`EscuelaID`) REFERENCES `Escuela` (`EscuelaID`);
@@ -473,8 +478,6 @@ ALTER TABLE `Inscripcion` ADD FOREIGN KEY (`EstudianteID`) REFERENCES `Persona` 
 ALTER TABLE `HorarioClase` ADD FOREIGN KEY (`ClaseID`) REFERENCES `AperturaCurso` (`AperturaCursoID`);
 
 ALTER TABLE `SesionClase` ADD FOREIGN KEY (`ClaseID`) REFERENCES `AperturaCurso` (`AperturaCursoID`);
-
-ALTER TABLE `SesionClase` ADD FOREIGN KEY (`HorarioID`) REFERENCES `HorarioClase` (`HorarioID`);
 
 ALTER TABLE `Asistencia` ADD FOREIGN KEY (`SesionID`) REFERENCES `SesionClase` (`SesionID`);
 
