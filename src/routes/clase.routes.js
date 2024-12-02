@@ -10,5 +10,6 @@ router.get("/:id", controllers.findOne);
 router.get("/:id/horario", controllers.findHorarios);
 router.post("/horario", controllers.createHorario);
 router.post("/horario/:id", controllers.updateHorario);
+router.post("/horario/:id/status", controllers.changeStatus);
 
 export default router;

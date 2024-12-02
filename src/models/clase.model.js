@@ -155,4 +155,26 @@ model.updateHorario = async (id, data) => {
     });
 };
 
+model.changeStatusHorario = async (id, status) => {
+  const sql = `
+  UPDATE HorarioClase 
+  SET ACTIVO = ?
+  WHERE HorarioID = ?
+  `;
+  return sequelize
+    .query(sql, {
+      replacements: [status, id],
+      type: QueryTypes.UPDATE,
+      raw: true,
+    })
+    .then(([result, metadata]) => {
+      // console.log("Updated person RESULT: ", result);
+      // console.log("Updated pers METADA: ", metadata);
+      return metadata;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
 export default model;

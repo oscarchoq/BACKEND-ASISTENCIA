@@ -137,4 +137,17 @@ controllers.updateHorario = async (req, res) => {
   }
 };
 
+controllers.changeStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { Activo } = req.body;
+
+    const newStatus = Activo === 0 ? 1 : 0;
+    const response = await modelClase.changeStatusHorario(id, newStatus);
+    return res.status(200).json({ message: "Estado actualizado" });
+  } catch (error) {
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
 export default controllers;
