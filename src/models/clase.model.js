@@ -177,4 +177,80 @@ model.changeStatusHorario = async (id, status) => {
     });
 };
 
+model.findInscritos = async (id, EstadoInscripcion, Codigo) => {
+  const sql = `
+    SELECT 
+      i.InscripcionID, i.ClaseID, i.EstudianteID, i.EstadoInscripcion,
+      CONCAT(p.ApellidoPaterno, " ", p.ApellidoMaterno, " ", p.Nombres) AS FullName,
+      p.Codigo
+    FROM Inscripcion AS i
+    LEFT JOIN Persona AS p ON p.PersonaID = i.EstudianteID
+    WHERE ClaseID = :id
+      AND (:EstadoInscripcion IS NULL OR i.EstadoInscripcion = :EstadoInscripcion)
+      AND (p.Codigo LIKE :Codigo)
+  `;
+  return sequelize
+    .query(sql, {
+      type: QueryTypes.SELECT,
+      // replacements: [id],
+      replacements: {
+        id,
+        EstadoInscripcion,
+        Codigo: `%${Codigo}%`,
+      },
+    })
+    .then((result) => {
+      // console.log("Showed pers RESULT: ", result);
+      return result;
+    })
+    .catch((error) => {
+      // console.log("Error: ", error);
+      throw error;
+    });
+};
+
+model.changeStatusInscripcion = async (id, status) => {
+  const sql = `
+  UPDATE Inscripcion 
+  SET EstadoInscripcion = ?
+  WHERE InscripcionID = ?
+  `;
+  return sequelize
+    .query(sql, {
+      replacements: [status, id],
+      type: QueryTypes.UPDATE,
+      raw: true,
+    })
+    .then(([result, metadata]) => {
+      // console.log("Updated person RESULT: ", result);
+      // console.log("Updated pers METADA: ", metadata);
+      return metadata;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
+model.changeStatusClase = async (id, status) => {
+  const sql = `
+  UPDATE AperturaCurso 
+  SET AprobacionAutomatica = ?
+  WHERE AperturaCursoID = ?
+  `;
+  return sequelize
+    .query(sql, {
+      replacements: [status, id],
+      type: QueryTypes.UPDATE,
+      raw: true,
+    })
+    .then(([result, metadata]) => {
+      // console.log("Updated person RESULT: ", result);
+      // console.log("Updated pers METADA: ", metadata);
+      return metadata;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
 export default model;

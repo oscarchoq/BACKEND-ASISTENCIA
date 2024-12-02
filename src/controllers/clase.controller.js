@@ -63,9 +63,11 @@ controllers.inscribir = async (req, res) => {
 
 controllers.UDPestadoInscripcion = async (req, res) => {
   try {
-    const { InscripcionID } = req.body;
-    const newStatus = "ACEPTADO";
-    const response = await modelInscripcion.update(InscripcionID, newStatus);
+    const { InscripcionID, EstadoInscripcion } = req.body;
+    const response = await modelInscripcion.update(
+      InscripcionID,
+      EstadoInscripcion
+    );
     return res
       .status(200)
       .json({ message: "Estado de inscripcion actualizado" });
@@ -144,6 +146,53 @@ controllers.changeStatus = async (req, res) => {
 
     const newStatus = Activo === 0 ? 1 : 0;
     const response = await modelClase.changeStatusHorario(id, newStatus);
+    return res.status(200).json({ message: "Estado actualizado" });
+  } catch (error) {
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+controllers.mostrarInscritos = async (req, res) => {
+  try {
+    // http://localhost:3000/api/v1/clases/2/inscritos?estado=8&&search=web
+    // console.log("curso");
+    const { id } = req.params;
+    console.log("estado a buscar", req.query.estado);
+
+    // const estado = req.query.estado ? String(req.query.estado) : null;
+    const estado = req.query.estado ? String(req.query.estado) : null;
+    const search = req.query.search ? req.query.search : "";
+    console.log("mm", estado);
+    // console.log(search);
+    const result = await modelClase.findInscritos(id, estado, search);
+    if (result) return res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+controllers.changeStatusInscripcion = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { EstadoInscripcion } = req.body;
+
+    const response = await modelClase.changeStatusInscripcion(
+      id,
+      EstadoInscripcion
+    );
+    return res.status(200).json({ message: "Estado actualizado" });
+  } catch (error) {
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+controllers.changeStatusClase = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { AprobacionAutomatica } = req.body;
+
+    const newStatus = AprobacionAutomatica === 0 ? 1 : 0;
+    const response = await modelClase.changeStatusClase(id, newStatus);
     return res.status(200).json({ message: "Estado actualizado" });
   } catch (error) {
     res.status(500).json({ error: "Error interno del servidor" });
