@@ -3,9 +3,12 @@ import controllers from "../controllers/clase.controller.js";
 
 const router = Router();
 
-router.get("/:id", controllers.findOne);
-router.get("/", controllers.findAll);
 router.post("/inscripcion", controllers.inscribir);
 router.post("/inscripcion/estado", controllers.UDPestadoInscripcion);
+router.get("/", controllers.findAll);
+router.get("/:id", controllers.findOne);
+router.get("/:id/horario", controllers.findHorarios);
+router.post("/horario", controllers.createHorario);
+router.post("/horario/:id", controllers.updateHorario);
 
 export default router;
