@@ -6,11 +6,8 @@ const model = {};
 model.findAll = async (tipo, id) => {
   let where = ``;
   if (tipo === 2) {
-    where = `WHERE i.EstudianteID = ? AND i.EstadoInscripcion = "ACEPTADO"`;
-  } else if (tipo === 3) {
-    where = `WHERE ac.DocenteID = ?`;
-  }
-  let sql = `SELECT 
+    where = `
+    SELECT 
                 ac.AperturaCursoID,  
                 CONCAT(pa.Denominacion, " ",  c.Denominacion, "-", ac.Grupo) AS Asignatura,
                 CONCAT(p.ApellidoPaterno, " ", p.ApellidoMaterno, " ", p.Nombres) AS Docente
@@ -19,7 +16,20 @@ model.findAll = async (tipo, id) => {
               INNER JOIN Curso AS c ON c.CursoID = ac.CursoID
               INNER JOIN PeriodoAcademico AS pa ON pa.PeriodoID = ac.PeriodoID
               LEFT JOIN Persona AS p ON p.PersonaID = ac.DocenteID
-`;
+    WHERE i.EstudianteID = ? AND i.EstadoInscripcion = "ACEPTADO"`;
+  } else if (tipo === 3) {
+    where = `
+    SELECT
+                ac.AperturaCursoID,
+                CONCAT(pa.Denominacion, " ",  c.Denominacion, "-", ac.Grupo) AS Asignatura,
+                CONCAT(p.ApellidoPaterno, " ", p.ApellidoMaterno, " ", p.Nombres) AS Docente
+              FROM AperturaCurso AS ac
+              INNER JOIN Curso AS c ON c.CursoID = ac.CursoID
+              INNER JOIN PeriodoAcademico AS pa ON pa.PeriodoID = ac.PeriodoID
+              LEFT JOIN Persona AS p ON p.PersonaID = ac.DocenteID
+    WHERE ac.DocenteID = ?`;
+  }
+  let sql = ``;
   sql += where;
   return sequelize
     .query(sql, {
