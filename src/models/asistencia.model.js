@@ -13,7 +13,7 @@ model.findAll = async (id) => {
       replacements: [id],
     })
     .then((result) => {
-      console.log("Showed pers RESULT: ", result);
+      // console.log("Showed pers RESULT: ", result);
       return result?.length > 0 ? result : [];
     })
     .catch((error) => {
@@ -32,7 +32,7 @@ model.findHorarios = async (id) => {
       replacements: [id],
     })
     .then((result) => {
-      console.log("Showed pers RESULT: ", result);
+      // console.log("Showed pers RESULT: ", result);
       return result?.length > 0 ? result : null;
     })
     .catch((error) => {
@@ -174,7 +174,6 @@ model.findAllAsistencia = async (id) => {
 FROM Asistencia a
 INNER JOIN Persona p ON p.PersonaID = a.EstudianteID
 WHERE SesionID = ?
-;
               `;
   return sequelize
     .query(sql, {
@@ -212,6 +211,65 @@ model.updateEstadoAsistencia = async (id, newEstado, Observacion) => {
       return metadata;
     })
     .catch((error) => {
+      throw error;
+    });
+};
+
+model.findAsistEst = async (ClaseID, PersonaID) => {
+  const sql = `SELECT 
+    A.EstudianteID,
+    COALESCE(SUM(CASE WHEN A.EstadoAsistencia = 1 THEN 1 ELSE 0 END), 0) AS Asistencias,
+    COALESCE(SUM(CASE WHEN A.EstadoAsistencia = 2 THEN 1 ELSE 0 END), 0) AS Tardanzas,
+    COALESCE(SUM(CASE WHEN A.EstadoAsistencia = 3 THEN 1 ELSE 0 END), 0) AS Faltas,
+    C.Denominacion AS NombreCurso,
+    CONCAT(P.Nombres, ' ', P.ApellidoPaterno, ' ', P.ApellidoMaterno) AS NombreDocente
+FROM 
+    Asistencia A
+JOIN 
+    SesionClase S ON A.SesionID = S.SesionID
+JOIN 
+    AperturaCurso AC ON S.ClaseID = AC.AperturaCursoID
+JOIN 
+    Curso C ON AC.CursoID = C.CursoID
+JOIN 
+    Persona P ON AC.DocenteID = P.PersonaID
+WHERE 
+    S.ClaseID = ?
+    AND A.EstudianteID = ?
+GROUP BY 
+    A.EstudianteID, C.Denominacion, NombreDocente
+ORDER BY 
+    A.EstudianteID
+              `;
+  //   const sql = `SELECT
+  //     A.EstudianteID,
+  //     COALESCE(SUM(CASE WHEN A.EstadoAsistencia = 1 THEN 1 ELSE 0 END), 0) AS Asistencias,
+  //     COALESCE(SUM(CASE WHEN A.EstadoAsistencia = 2 THEN 1 ELSE 0 END), 0) AS Tardanzas,
+  //     COALESCE(SUM(CASE WHEN A.EstadoAsistencia = 3 THEN 1 ELSE 0 END), 0) AS Faltas
+  // FROM
+  //     Asistencia A
+  // JOIN
+  //     SesionClase S ON A.SesionID = S.SesionID
+  // WHERE
+  //     S.ClaseID = ?
+  //     AND A.EstudianteID = ?
+  // GROUP BY
+  //     A.EstudianteID
+  // ORDER BY
+  //     A.EstudianteID
+  // ;
+  //               `;
+  return sequelize
+    .query(sql, {
+      type: QueryTypes.SELECT,
+      replacements: [ClaseID, PersonaID],
+    })
+    .then((result) => {
+      // console.log("Showed pers RESULT: ", result);
+      return result[0];
+    })
+    .catch((error) => {
+      // console.log("Error: ", error);
       throw error;
     });
 };

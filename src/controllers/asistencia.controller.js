@@ -15,7 +15,7 @@ controllers.mostrar = async (req, res) => {
 controllers.createSesion = async (req, res) => {
   try {
     const data = req.body;
-
+    // console.log("create asesion", data);
     const saveHorario = model.createSesion(data);
     if (saveHorario)
       return res.status(200).json({ message: "Registro completado" });
@@ -40,6 +40,7 @@ controllers.mostrarAsistencia = async (req, res) => {
   try {
     const { id } = req.params;
     const result = await model.findAllAsistencia(id);
+    // console.log("asistencia result", result);
     if (result) return res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ error: "Error interno del servidor" });
@@ -72,6 +73,42 @@ controllers.marcarAsistencia = async (req, res) => {
     // return res.status(200).json({ result: result });
   } catch (error) {
     // console.log(error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+controllers.marcarAsistenciaGeo = async (req, res) => {
+  try {
+    const { PersonaID, TipoPersonaID } = req.user;
+
+    // console.log("persona ID", PersonaID);
+    // console.log("tipo persona ID", TipoPersonaID);
+    const { id } = req.params;
+    const data = req.body;
+
+    // console.log("Data");
+    res.status(200).json({ message: "Cambios registrados" });
+    // const result = await model.updateSesion(id, data);
+    // return res.status(200).json({ result: result });
+  } catch (error) {
+    // console.log(error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+controllers.mostrarAsistenciaGeo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { PersonaID, TipoPersonaID } = req.user;
+
+    // console.log("id", id);
+    // console.log("persona ID", PersonaID);
+    // console.log("tipo persona ID", TipoPersonaID);
+
+    // const result = await model.findAllAsistencia(id);
+    const result = await model.findAsistEst(id, PersonaID);
+    if (result) return res.status(200).json(result);
+  } catch (error) {
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
