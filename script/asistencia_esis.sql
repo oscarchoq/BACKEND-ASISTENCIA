@@ -442,9 +442,9 @@ CREATE TABLE `Asistencia` (
   `SesionID` int NOT NULL,
   `EstadoAsistencia` int DEFAULT 3 COMMENT '1 Asistio; 2 Tarde; 3 Falta; 4 Justificado',
   `Observacion` text,
-  `DispositivoID` varchar(50) NOT NULL,
-  `Latitud` decimal(9,6) NOT NULL,
-  `Longitud` decimal(9,6) NOT NULL,
+  `DispositivoID` varchar(50) NULL,
+  `Latitud` decimal(9,6) NULL,
+  `Longitud` decimal(9,6) NULL,
   `FechaRegistro` datetime DEFAULT current_timestamp(),
   `Eliminado` bool DEFAULT false
 );
@@ -493,3 +493,42 @@ ALTER TABLE `Credenciales` ADD FOREIGN KEY (`PersonaID`) REFERENCES `Persona` (`
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
+DELIMITER $$
+
+CREATE TRIGGER after_insert_sesionclase
+AFTER INSERT ON SesionClase
+FOR EACH ROW
+BEGIN
+    -- Inserta un registro en Asistencia para cada estudiante aceptado en la misma ClaseID
+    INSERT INTO Asistencia (SesionID, EstudianteID)
+    SELECT NEW.SesionID, i.EstudianteID
+    FROM Inscripcion i
+    WHERE i.ClaseID = NEW.ClaseID
+      AND i.EstadoInscripcion = 'ACEPTADO';
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER after_update_estado_inscripcion
+AFTER UPDATE ON Inscripcion
+FOR EACH ROW
+BEGIN
+    IF NEW.EstadoInscripcion = 'ACEPTADO' AND OLD.EstadoInscripcion != 'ACEPTADO' THEN
+        -- Verificar y evitar duplicados en Asistencia
+        INSERT INTO Asistencia (SesionID, EstudianteID)
+        SELECT sc.SesionID, NEW.EstudianteID
+        FROM SesionClase sc
+        WHERE sc.ClaseID = NEW.ClaseID
+        AND NOT EXISTS (
+            SELECT 1
+            FROM Asistencia a
+            WHERE a.SesionID = sc.SesionID
+              AND a.EstudianteID = NEW.EstudianteID
+        );
+    END IF;
+END$$
+
+DELIMITER ;

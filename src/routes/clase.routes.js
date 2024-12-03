@@ -15,6 +15,8 @@ router.post("/horario/:id", controllers.updateHorario);
 router.get("/:id/horario", controllers.findHorarios);
 
 router.post("/asistencia", AsistenciaController.createSesion);
+router.get("/asistencia/:id", AsistenciaController.mostrarAsistencia);
+router.post("/asistencia/:id/marcar", AsistenciaController.marcarAsistencia);
 router.post("/asistencia/:id", AsistenciaController.updateSesion);
 router.get("/:id/asistencia", AsistenciaController.mostrar);
 

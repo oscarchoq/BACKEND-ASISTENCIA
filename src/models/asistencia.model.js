@@ -165,4 +165,55 @@ model.updateSesion = async (id, data) => {
       throw error;
     });
 };
+
+model.findAllAsistencia = async (id) => {
+  const sql = `SELECT 
+	a.AsistenciaID, a.EstudianteID, a.SesionID, a.EstadoAsistencia, a.Observacion, 
+    a.DispositivoID, a.Latitud, a.Longitud,
+    p.Codigo, CONCAT(p.ApellidoPaterno, " ", p.ApellidoMaterno, " ", Nombres) AS FullName
+FROM Asistencia a
+INNER JOIN Persona p ON p.PersonaID = a.EstudianteID
+WHERE SesionID = ?
+;
+              `;
+  return sequelize
+    .query(sql, {
+      type: QueryTypes.SELECT,
+      replacements: [id],
+    })
+    .then((result) => {
+      // console.log("Showed pers RESULT: ", result);
+      return result?.length > 0 ? result : [];
+    })
+    .catch((error) => {
+      // console.log("Error: ", error);
+      throw error;
+    });
+};
+
+model.updateEstadoAsistencia = async (id, newEstado, Observacion) => {
+  const sql = `
+    UPDATE Asistencia
+    SET 
+      EstadoAsistencia = ?,
+      Observacion = ?
+    WHERE AsistenciaID = ?
+  `;
+
+  return sequelize
+    .query(sql, {
+      replacements: [newEstado, Observacion || null, id],
+      type: QueryTypes.UPDATE,
+      raw: true,
+    })
+    .then(([result, metadata]) => {
+      // console.log("Updated person RESULT: ", result);
+      // console.log("Updated pers METADA: ", metadata);
+      return metadata;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
 export default model;
