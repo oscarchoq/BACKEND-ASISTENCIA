@@ -1,3 +1,4 @@
+import { verificarUbicacion } from "../libs/gps.js";
 import { generarCodigoOTP } from "../libs/randomCode.js";
 import model from "../models/asistencia.model.js";
 
@@ -85,15 +86,49 @@ controllers.marcarAsistencia = async (req, res) => {
 
 controllers.marcarAsistenciaGeo = async (req, res) => {
   try {
-    const { PersonaID, TipoPersonaID } = req.user;
-
-    // console.log("persona ID", PersonaID);
-    // console.log("tipo persona ID", TipoPersonaID);
     const { id } = req.params;
+    const { PersonaID, TipoPersonaID } = req.user;
     const data = req.body;
 
-    // console.log("Data");
-    res.status(200).json({ message: "Cambios registrados" });
+    // console.log("clase ID", id);
+    // console.log("persona ID", PersonaID);
+    // console.log("tipo persona ID", TipoPersonaID);
+    // console.log("DATA QUE LLEGA", data);
+
+    const codeFound = await model.findOneSesionCode(id, data.CodigoSesion);
+    // console.log("codigo found", codeFound);
+
+    if (!codeFound) {
+      return res.status(404).json({ error: "Código de asistencia inválido" });
+    }
+
+    // console.log("codefound", codeFound[0].SesionID);
+    const newEstado = 1;
+    const Latitud = data.Latitud;
+    const Longitud = data.Longitud;
+
+    // console.log("Latitud", Latitud);
+    // console.log("Longitud", Longitud);
+
+    const isValidGPS = verificarUbicacion(Latitud, Longitud);
+
+    // console.log("es valido? ", isValidGPS);
+    if (isValidGPS) {
+      const marcado = await model.marcarEstadoAsistencia(
+        PersonaID,
+        codeFound[0].SesionID,
+        newEstado,
+        Latitud,
+        Longitud
+      );
+      // console.log("marcado found", marcado);
+      res.status(200).json({ message: "Registrado" });
+    } else {
+      // Error: No esta dentro del rango permitido
+      res
+        .status(400)
+        .json({ error: "No se encuentra dentro del rango permitido" });
+    }
     // const result = await model.updateSesion(id, data);
     // return res.status(200).json({ result: result });
   } catch (error) {

@@ -485,6 +485,9 @@ ALTER TABLE `Asistencia` ADD FOREIGN KEY (`EstudianteID`) REFERENCES `Persona` (
 
 ALTER TABLE `Credenciales` ADD FOREIGN KEY (`PersonaID`) REFERENCES `Persona` (`PersonaID`);
 
+ALTER TABLE `Asistencia`
+ADD CONSTRAINT `unique_estudiante_sesion` UNIQUE (`EstudianteID`, `SesionID`);
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

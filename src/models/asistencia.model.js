@@ -294,4 +294,55 @@ ORDER BY
     });
 };
 
+model.findOneSesionCode = async (id, CodigoSesion) => {
+  const sql = `SELECT * 
+                FROM SesionClase
+                WHERE 
+                  CodigoSesion = ? AND
+                  ClaseID = ?
+              `;
+  return sequelize
+    .query(sql, {
+      type: QueryTypes.SELECT,
+      replacements: [CodigoSesion, id],
+    })
+    .then((result) => {
+      // console.log("Showed pers RESULT: ", result);
+      return !result || result?.length === 0 ? null : result;
+    })
+    .catch((error) => {
+      // console.log("Error: ", error);
+      throw error;
+    });
+};
+
+model.marcarEstadoAsistencia = async (
+  EstudianteID,
+  idSesion,
+  Estado,
+  Latitud = "",
+  Longitud = ""
+) => {
+  const sql = `
+    INSERT INTO Asistencia (EstudianteID, SesionID, EstadoAsistencia, Latitud, Longitud)
+    VALUES (${EstudianteID}, ${idSesion}, ${Estado}, "${Latitud}", "${Longitud}")
+    ON DUPLICATE KEY UPDATE
+    EstadoAsistencia = ${Estado}, Latitud = "${Latitud}", Longitud = "${Longitud}"
+;
+  `;
+
+  return sequelize
+    .query(sql, {
+      raw: true,
+    })
+    .then(([result, metadata]) => {
+      // console.log("Updated person RESULT: ", result);
+      // console.log("Updated pers METADA: ", metadata);
+      return metadata;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
 export default model;
