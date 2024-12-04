@@ -22,6 +22,25 @@ model.findAll = async (id) => {
     });
 };
 
+model.findSesionOne = async (id) => {
+  const sql = `SELECT * FROM SesionClase
+              WHERE SesionID = ?
+              `;
+  return sequelize
+    .query(sql, {
+      type: QueryTypes.SELECT,
+      replacements: [id],
+    })
+    .then((result) => {
+      // console.log("Showed pers RESULT: ", result);
+      return result;
+    })
+    .catch((error) => {
+      // console.log("Error: ", error);
+      throw error;
+    });
+};
+
 model.findHorarios = async (id) => {
   const sql = `SELECT * FROM HorarioClase
               WHERE ClaseID = ?

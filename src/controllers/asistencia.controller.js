@@ -41,9 +41,13 @@ controllers.updateSesion = async (req, res) => {
 controllers.mostrarAsistencia = async (req, res) => {
   try {
     const { id } = req.params;
+    const asis = await model.findSesionOne(id);
+    // console.log("controller", asis);
     const result = await model.findAllAsistencia(id);
     // console.log("asistencia result", result);
-    if (result) return res.status(200).json(result);
+    return res
+      .status(200)
+      .json({ CodigoSesion: asis[0].CodigoSesion, estudiantes: result });
   } catch (error) {
     res.status(500).json({ error: "Error interno del servidor" });
   }
