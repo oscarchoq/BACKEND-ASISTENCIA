@@ -26,10 +26,10 @@ function haversine(lat1, lon1, lat2, lon2) {
 
 export function verificarUbicacion(latActual, lonActual) {
   // -18.024778620385778, -70.25095834233083
-  // const latBase = -17.972765200316353;
-  // const lonBase = -70.22736907381774;
-  const latBase = -18.024778620385778;
-  const lonBase = -70.25095834233083;
+  const latBase = -17.972765200316353;
+  const lonBase = -70.22736907381774;
+  // const latBase = -18.024778620385778;
+  // const lonBase = -70.25095834233083;
   const radio = 2; // Radio en kilómetros
   const distancia = haversine(latBase, lonBase, latActual, lonActual);
   return distancia <= radio;

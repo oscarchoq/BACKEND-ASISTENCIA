@@ -103,7 +103,36 @@ controllers.marcarAsistenciaGeo = async (req, res) => {
     }
 
     // console.log("codefound", codeFound[0].SesionID);
-    const newEstado = 1;
+    // ESTABLECER ESTADO DE ASISTENCIA
+    // ESTABLECER ESTADO DE ASISTENCIA
+    // const newEstado = 1;
+
+    // Determinar el estado de asistencia basado en la tolerancia
+    const sesion = codeFound[0]; // Sesión obtenida de la base de datos
+    const ahora = new Date(); // Hora actual
+    const horaInicio = new Date(`${sesion.FechaSesion}T${sesion.HoraInicio}`);
+    // console.log("Ahora", ahora);
+    // console.log("Hora inicio", horaInicio);
+    // console.log("LLEGA mili", horaInicio.getTime());
+    let newEstado = 1; // Por defecto: Asistió a tiempo
+
+    if (sesion.Tolerancia !== null) {
+      // console.log(sesion.Tolerancia);
+      const toleranciaMs = parseInt(sesion.Tolerancia) * 60 * 1000; // Convertir minutos a milisegundos
+      const horaLimite = new Date(horaInicio.getTime() + toleranciaMs);
+      // console.log("Hora limite", horaLimite);
+
+      if (ahora > horaInicio && ahora <= horaLimite) {
+        // console.log("temprano");
+        newEstado = 1; // Asistencia tardía
+      } else {
+        // console.log("tarde?");
+        newEstado = 2; // Asistencia tardía
+      }
+    }
+    // console.log("ESTADO", newEstado);
+    // ESTABLECER ESTADO DE ASISTENCIA
+
     const Latitud = data.Latitud;
     const Longitud = data.Longitud;
 
