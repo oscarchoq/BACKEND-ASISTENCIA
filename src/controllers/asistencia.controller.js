@@ -1,3 +1,4 @@
+import { generarCodigoOTP } from "../libs/randomCode.js";
 import model from "../models/asistencia.model.js";
 
 const controllers = {};
@@ -16,7 +17,8 @@ controllers.createSesion = async (req, res) => {
   try {
     const data = req.body;
     // console.log("create asesion", data);
-    const saveHorario = model.createSesion(data);
+    const CodigoSesion = generarCodigoOTP();
+    const saveHorario = model.createSesion(data, CodigoSesion);
     if (saveHorario)
       return res.status(200).json({ message: "Registro completado" });
   } catch (error) {

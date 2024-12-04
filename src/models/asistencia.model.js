@@ -97,11 +97,11 @@ model.findOneSesion = async (id, data) => {
     });
 };
 
-model.createSesion = async (data) => {
+model.createSesion = async (data, CodigoSesion) => {
   const tolerancia = data.Tolerancia || null;
 
-  const sql = `INSERT INTO SesionClase (ClaseID, DiaSemana, FechaSesion, HoraInicio, HoraFin, Tolerancia, TipoClase)
-              VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  const sql = `INSERT INTO SesionClase (ClaseID, DiaSemana, FechaSesion, HoraInicio, HoraFin, Tolerancia, TipoClase, CodigoSesion)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
   return sequelize
     .query(sql, {
@@ -113,6 +113,7 @@ model.createSesion = async (data) => {
         data.HoraFin,
         tolerancia,
         data.TipoClase,
+        CodigoSesion,
       ],
       type: QueryTypes.INSERT,
     })
