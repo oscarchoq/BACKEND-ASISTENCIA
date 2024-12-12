@@ -139,7 +139,8 @@ controllers.marcarAsistenciaGeo = async (req, res) => {
     // console.log("Latitud", Latitud);
     // console.log("Longitud", Longitud);
 
-    const isValidGPS = verificarUbicacion(Latitud, Longitud);
+    // const isValidGPS = verificarUbicacion(Latitud, Longitud);
+    const isValidGPS = true;
 
     // console.log("es valido? ", isValidGPS);
     if (isValidGPS) {
